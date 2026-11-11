@@ -2,121 +2,163 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, ScrollView, Platform } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
-type ActiveTab = 'storefront' | 'chat' | 'accounting' | 'vault';
+// 5 Core Navigation Pillars defined in Section 19 of TredBook Master PRD
+type NavigationTab = 'home' | 'social' | 'marketplace' | 'business' | 'profile';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<ActiveTab>('storefront');
+  const [activeTab, setActiveTab] = useState<NavigationTab>('home');
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar style="dark" />
       
-      {/* Header Bar */}
+      {/* Top Header Bar */}
       <View style={styles.header}>
         <View>
           <Text style={styles.headerTitle}>TredBook Super-App</Text>
           <Text style={styles.headerSubtitle}>Commerce, Community & Accounting</Text>
         </View>
-        <View style={styles.onlineBadge}>
-          <Text style={styles.onlineBadgeText}>Live</Text>
+        <View style={styles.badgeRow}>
+          <View style={styles.onlineBadge}>
+            <Text style={styles.onlineBadgeText}>Live</Text>
+          </View>
         </View>
       </View>
 
       {/* Main Workspace */}
       <ScrollView contentContainerStyle={styles.contentContainer}>
-        {activeTab === 'storefront' && (
+        {/* Tab 1: Home Dashboard (PRD Section 6.1) */}
+        {activeTab === 'home' && (
           <View style={styles.card}>
-            <Text style={styles.cardEmoji}>🏪</Text>
-            <Text style={styles.cardTitle}>Marketplace & Digital Storefront</Text>
+            <Text style={styles.cardEmoji}>🏠</Text>
+            <Text style={styles.cardTitle}>Customer Home Dashboard</Text>
             <Text style={styles.cardDesc}>
-              Hyper-local business discovery, 1-25km radius filters, merchant catalogs, single-store cart, COD & UPI payments.
+              Discover nearby verified shops, browse trending categories, track active orders, view your Digital Purchase Book, and check your loyalty rewards.
             </Text>
+            <View style={styles.metaBox}>
+              <Text style={styles.metaTitle}>Customer ID: TB-C50245</Text>
+              <Text style={styles.metaSub}>ReliabilityScore (CRS): 750 (Strong)</Text>
+            </View>
             <View style={styles.tagRow}>
-              <Text style={styles.tag}>FN-MKT-01 to 20</Text>
-              <Text style={styles.tag}>Geo-Spatial Radius</Text>
-              <Text style={styles.tag}>Single Merchant Cart</Text>
+              <Text style={styles.tag}>PRD Section 6.1</Text>
+              <Text style={styles.tag}>Purchase Book Vault</Text>
+              <Text style={styles.tag}>Order Tracking</Text>
             </View>
           </View>
         )}
 
-        {activeTab === 'chat' && (
+        {/* Tab 2: Social Ecosystem (PRD Section 7 & FN-CHAT) */}
+        {activeTab === 'social' && (
           <View style={styles.card}>
             <Text style={styles.cardEmoji}>💬</Text>
-            <Text style={styles.cardTitle}>Customer Chat & Social Ecosystem</Text>
+            <Text style={styles.cardTitle}>Social & Real-Time Communication</Text>
             <Text style={styles.cardDesc}>
-              Real-time 1-on-1 & 1,000-member groups, interactive invoice payment cards, quotation cards, 24h stories, and unified inbox.
+              Real-time 1-on-1 & 1,000-member community rooms, interactive invoice payment cards, quotation cards, 24h stories with product tags, and broadcast channels.
             </Text>
             <View style={styles.tagRow}>
               <Text style={styles.tag}>FN-CHAT-01 to 18</Text>
-              <Text style={styles.tag}>Socket.io Gateway</Text>
-              <Text style={styles.tag}>UPI Pay Cards</Text>
+              <Text style={styles.tag}>Interactive UPI Cards</Text>
+              <Text style={styles.tag}>24h Stories</Text>
+              <Text style={styles.tag}>Broadcast Channels</Text>
             </View>
           </View>
         )}
 
-        {activeTab === 'accounting' && (
+        {/* Tab 3: Marketplace & Storefront (PRD Section 6 & FN-MKT) */}
+        {activeTab === 'marketplace' && (
+          <View style={styles.card}>
+            <Text style={styles.cardEmoji}>🏪</Text>
+            <Text style={styles.cardTitle}>Marketplace & Digital Storefronts</Text>
+            <Text style={styles.cardDesc}>
+              Hyper-local geo-spatial discovery (1–25 km radius), merchant public storefronts, single-merchant cart checkout, Cash on Delivery, and Pay-at-Store.
+            </Text>
+            <View style={styles.tagRow}>
+              <Text style={styles.tag}>FN-MKT-01 to 20</Text>
+              <Text style={styles.tag}>Geo-Radius Filter</Text>
+              <Text style={styles.tag}>Single-Store Cart</Text>
+              <Text style={styles.tag}>B2B Wholesale</Text>
+            </View>
+          </View>
+        )}
+
+        {/* Tab 4: Business Ecosystem & Accounting (PRD Section 5 & tredbook-web) */}
+        {activeTab === 'business' && (
           <View style={styles.card}>
             <Text style={styles.cardEmoji}>📊</Text>
-            <Text style={styles.cardTitle}>Accounting Platform (tredbook-web)</Text>
+            <Text style={styles.cardTitle}>Business Ecosystem & Accounting</Text>
             <Text style={styles.cardDesc}>
-              Enterprise GST accounting, invoices, jewellery tounch/wastage formulas, double-entry ledger, and thermal print bridge.
+              Full business operating system: Accounting & Billing via tredbook-web, inventory, CRM, Unified Business Inbox, and ESC/POS thermal printing bridge.
             </Text>
+            <View style={styles.metaBox}>
+              <Text style={styles.metaTitle}>Business ID: TB-B10245</Text>
+              <Text style={styles.metaSub}>TrustScore (BTS): 820 (Very Strong)</Text>
+            </View>
             <View style={styles.tagRow}>
               <Text style={styles.tag}>FN-WEB-01 to 73</Text>
               <Text style={styles.tag}>SSO Web Bridge</Text>
-              <Text style={styles.tag}>ESC/POS Printing</Text>
+              <Text style={styles.tag}>Unified Business Inbox</Text>
+              <Text style={styles.tag}>Mode 1/2/3 Sync</Text>
             </View>
           </View>
         )}
 
-        {activeTab === 'vault' && (
+        {/* Tab 5: Profile & Identity (PRD Section 4 & 11) */}
+        {activeTab === 'profile' && (
           <View style={styles.card}>
-            <Text style={styles.cardEmoji}>🛡️</Text>
-            <Text style={styles.cardTitle}>Digital Purchase Vault & Warranty</Text>
+            <Text style={styles.cardEmoji}>👤</Text>
+            <Text style={styles.cardTitle}>Profile & Trust Management</Text>
             <Text style={styles.cardDesc}>
-              Personal customer vault archiving digital invoices across all merchants, live warranty countdown clock, and paper bill OCR scanner.
+              Unified TredBook account management. Switch between Customer and Business contexts, manage QR code passports, view TrustProfile history, and dispute records.
             </Text>
             <View style={styles.tagRow}>
-              <Text style={styles.tag}>FN-MKT-15</Text>
-              <Text style={styles.tag}>FN-MKT-16</Text>
-              <Text style={styles.tag}>Digital Warranty Passport</Text>
+              <Text style={styles.tag}>Unified Account</Text>
+              <Text style={styles.tag}>TrustProfile (BTS/CRS)</Text>
+              <Text style={styles.tag}>KYC Verification</Text>
             </View>
           </View>
         )}
       </ScrollView>
 
-      {/* Bottom Tab Bar */}
+      {/* 5-Item Bottom Navigation Bar (PRD Section 19) */}
       <View style={styles.tabBar}>
         <TouchableOpacity
-          style={[styles.tabButton, activeTab === 'storefront' && styles.tabButtonActive]}
-          onPress={() => setActiveTab('storefront')}
+          style={[styles.tabButton, activeTab === 'home' && styles.tabButtonActive]}
+          onPress={() => setActiveTab('home')}
         >
-          <Text style={styles.tabIcon}>🏪</Text>
-          <Text style={[styles.tabText, activeTab === 'storefront' && styles.tabTextActive]}>Market</Text>
+          <Text style={styles.tabIcon}>🏠</Text>
+          <Text style={[styles.tabText, activeTab === 'home' && styles.tabTextActive]}>Home</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={[styles.tabButton, activeTab === 'chat' && styles.tabButtonActive]}
-          onPress={() => setActiveTab('chat')}
+          style={[styles.tabButton, activeTab === 'social' && styles.tabButtonActive]}
+          onPress={() => setActiveTab('social')}
         >
           <Text style={styles.tabIcon}>💬</Text>
-          <Text style={[styles.tabText, activeTab === 'chat' && styles.tabTextActive]}>Chat</Text>
+          <Text style={[styles.tabText, activeTab === 'social' && styles.tabTextActive]}>Social</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={[styles.tabButton, activeTab === 'accounting' && styles.tabButtonActive]}
-          onPress={() => setActiveTab('accounting')}
+          style={[styles.tabButton, activeTab === 'marketplace' && styles.tabButtonActive]}
+          onPress={() => setActiveTab('marketplace')}
+        >
+          <Text style={styles.tabIcon}>🏪</Text>
+          <Text style={[styles.tabText, activeTab === 'marketplace' && styles.tabTextActive]}>Market</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.tabButton, activeTab === 'business' && styles.tabButtonActive]}
+          onPress={() => setActiveTab('business')}
         >
           <Text style={styles.tabIcon}>📊</Text>
-          <Text style={[styles.tabText, activeTab === 'accounting' && styles.tabTextActive]}>Books</Text>
+          <Text style={[styles.tabText, activeTab === 'business' && styles.tabTextActive]}>Business</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={[styles.tabButton, activeTab === 'vault' && styles.tabButtonActive]}
-          onPress={() => setActiveTab('vault')}
+          style={[styles.tabButton, activeTab === 'profile' && styles.tabButtonActive]}
+          onPress={() => setActiveTab('profile')}
         >
-          <Text style={styles.tabIcon}>🛡️</Text>
-          <Text style={[styles.tabText, activeTab === 'vault' && styles.tabTextActive]}>Vault</Text>
+          <Text style={styles.tabIcon}>👤</Text>
+          <Text style={[styles.tabText, activeTab === 'profile' && styles.tabTextActive]}>Profile</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -148,6 +190,10 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#64748B',
     marginTop: 2,
+  },
+  badgeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   onlineBadge: {
     backgroundColor: '#DCFCE7',
@@ -191,6 +237,22 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     marginBottom: 16,
   },
+  metaBox: {
+    backgroundColor: '#F1F5F9',
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 16,
+  },
+  metaTitle: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#0F172A',
+  },
+  metaSub: {
+    fontSize: 12,
+    color: '#475569',
+    marginTop: 2,
+  },
   tagRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -211,7 +273,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#E2E8F0',
     paddingVertical: 8,
-    paddingHorizontal: 12,
+    paddingHorizontal: 8,
   },
   tabButton: {
     flex: 1,
