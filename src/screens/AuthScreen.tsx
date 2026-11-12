@@ -273,11 +273,14 @@ export const AuthScreen: React.FC = () => {
   const webClientId =
     process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID ||
     '693844899377-4im1pq0p521cb19ronpuh82og89kvemo.apps.googleusercontent.com';
+  const androidClientId =
+    process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID ||
+    '693844899377-95mutmc5ac5frt2miq026erevbof0m5a.apps.googleusercontent.com';
 
   const [googleRequest, googleResponse, promptGoogleAsync] = Google.useIdTokenAuthRequest({
     clientId: webClientId,
     webClientId: webClientId,
-    androidClientId: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID || webClientId,
+    androidClientId: androidClientId,
     iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID || webClientId,
   });
 
