@@ -18,6 +18,7 @@ import { AuthProvider, useAuth } from './src/context/AuthContext';
 import { AuthScreen } from './src/screens/AuthScreen';
 import { ProfileScreen } from './src/screens/ProfileScreen';
 import { SocialScreen } from './src/screens/SocialScreen';
+import { MarketplaceScreen } from './src/screens/MarketplaceScreen';
 import { BiometricPromptModal } from './src/components/BiometricPromptModal';
 import { Palette, SoftShadow } from './src/theme/colors';
 
@@ -110,6 +111,8 @@ const MainAppContent: React.FC = () => {
         <ProfileScreen />
       ) : activeTab === 'social' ? (
         <SocialScreen />
+      ) : activeTab === 'marketplace' ? (
+        <MarketplaceScreen onNavigateToChat={() => setActiveTab('social')} />
       ) : (
         <ScrollView contentContainerStyle={styles.contentContainer}>
           {/* Tab 1: Home Dashboard (PRD Section 6.1) */}
@@ -129,24 +132,6 @@ const MainAppContent: React.FC = () => {
                 <Text style={styles.tag}>PRD Section 6.1</Text>
                 <Text style={styles.tag}>Purchase Book Vault</Text>
                 <Text style={styles.tag}>Order Tracking</Text>
-              </View>
-            </View>
-          )}
-
-          {/* Tab 3: Marketplace & Storefront (PRD Section 6 & FN-MKT) */}
-          {activeTab === 'marketplace' && (
-            <View style={styles.card}>
-              <Text style={styles.cardEmoji}>🏪</Text>
-              <Text style={styles.cardTitle}>Marketplace & Digital Storefronts</Text>
-              <Text style={styles.cardDesc}>
-                Hyper-local geo-spatial discovery (1–25 km radius), merchant public storefronts,
-                single-merchant cart checkout, Cash on Delivery, and Pay-at-Store.
-              </Text>
-              <View style={styles.tagRow}>
-                <Text style={styles.tag}>FN-MKT-01 to 20</Text>
-                <Text style={styles.tag}>Geo-Radius Filter</Text>
-                <Text style={styles.tag}>Single-Store Cart</Text>
-                <Text style={styles.tag}>B2B Wholesale</Text>
               </View>
             </View>
           )}
