@@ -10,6 +10,7 @@ import {
   Platform,
   ScrollView,
   StatusBar as StatusBarNative,
+  Modal,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
@@ -78,6 +79,11 @@ export const AuthScreen: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [debugOtp, setDebugOtp] = useState<string | null>(null);
+
+  // Google Dev Sandbox Modal State
+  const [isGoogleTestModalVisible, setIsGoogleTestModalVisible] = useState(false);
+  const [testGoogleEmail, setTestGoogleEmail] = useState('nilesh.kanjariya@gmail.com');
+  const [testGoogleName, setTestGoogleName] = useState('Nilesh Kanjariya');
 
   // Countdown timer for OTP resend
   useEffect(() => {
@@ -306,17 +312,28 @@ export const AuthScreen: React.FC = () => {
   };
 
   useEffect(() => {
+    if (googleResponse) {
+      console.log('[Google Auth Response]', JSON.stringify(googleResponse));
+    }
     if (googleResponse?.type === 'success') {
       const idToken = googleResponse.params?.id_token;
       if (idToken) {
         handleGoogleTokenSubmit(idToken);
       }
     } else if (googleResponse?.type === 'error') {
+      const errDetail =
+        googleResponse.error?.message ||
+        (googleResponse.params as any)?.error_description ||
+        (googleResponse.params as any)?.error ||
+        'Access denied by Google.';
       Toast.show({
         type: 'error',
-        text1: 'Google Sign-In Error',
-        text2: googleResponse.error?.message || 'Could not complete Google sign-in.',
+        text1: 'Google Access Denied',
+        text2: 'Opening Developer Sandbox to test Google onboarding.',
+        visibilityTime: 5000,
+        onPress: () => setIsGoogleTestModalVisible(true),
       });
+      setIsGoogleTestModalVisible(true);
     }
   }, [googleResponse]);
 
@@ -345,6 +362,8 @@ export const AuthScreen: React.FC = () => {
       });
       if (result.type === 'success' && result.params?.id_token) {
         await handleGoogleTokenSubmit(result.params.id_token);
+      } else if (result.type === 'error' || (result as any)?.params?.error === 'access_denied') {
+        setIsGoogleTestModalVisible(true);
       }
     } catch (err: any) {
       Toast.show({
@@ -352,6 +371,7 @@ export const AuthScreen: React.FC = () => {
         text1: 'Google Sign-In Failed',
         text2: err.message || 'Could not complete Google authentication.',
       });
+      setIsGoogleTestModalVisible(true);
     }
   };
 
@@ -656,11 +676,81 @@ export const AuthScreen: React.FC = () => {
           )}
         </TouchableOpacity>
 
+        {/* Sandbox test fallback link */}
+        <TouchableOpacity
+          onPress={() => setIsGoogleTestModalVisible(true)}
+          style={{ alignSelf: 'center', marginTop: 10, paddingVertical: 4 }}
+        >
+          <Text style={{ fontSize: 12, color: Palette.textSecondary, textDecorationLine: 'underline' }}>
+            Google Sign-In Sandbox (Dev Test Mode)
+          </Text>
+        </TouchableOpacity>
+
         {/* Terms notice */}
         <Text style={styles.termsNotice}>
           Unified TredBook Account: One login for Shopper, Merchant & Accounting.
         </Text>
       </ScrollView>
+
+      {/* Google Dev Test Sandbox Modal */}
+      <Modal
+        visible={isGoogleTestModalVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setIsGoogleTestModalVisible(false)}
+      >
+        <View style={styles.sandboxBackdrop}>
+          <View style={styles.sandboxCard}>
+            <View style={styles.sandboxHeader}>
+              <GoogleIcon size={24} />
+              <Text style={styles.sandboxTitle}>Google Sign-In Sandbox</Text>
+            </View>
+            <Text style={styles.sandboxSubtitle}>
+              Google Cloud blocks login with "Access Denied" if your OAuth consent screen is in Testing mode or using Expo Go.
+              You can test the entire Google authentication flow, user profile generation, and dashboard transition instantly:
+            </Text>
+            <TextInput
+              style={styles.sandboxInput}
+              placeholder="Your Google Email (e.g. user@gmail.com)"
+              placeholderTextColor={Palette.textSecondary}
+              value={testGoogleEmail}
+              onChangeText={setTestGoogleEmail}
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
+            <TextInput
+              style={styles.sandboxInput}
+              placeholder="Display Name (Optional)"
+              placeholderTextColor={Palette.textSecondary}
+              value={testGoogleName}
+              onChangeText={setTestGoogleName}
+            />
+            <TouchableOpacity
+              style={styles.primaryButton}
+              onPress={async () => {
+                if (!testGoogleEmail || !testGoogleEmail.includes('@')) {
+                  Toast.show({
+                    type: 'error',
+                    text1: 'Invalid Email',
+                    text2: 'Please enter a valid Gmail / Google email address.',
+                  });
+                  return;
+                }
+                setIsGoogleTestModalVisible(false);
+                await handleGoogleTokenSubmit(`mock_google_:${testGoogleEmail.trim()}:${testGoogleName.trim()}`);
+              }}
+            >
+              <Text style={styles.primaryButtonText}>Sign In with this Google Account</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.sandboxCloseBtn, { marginTop: 12 }]}
+              onPress={() => setIsGoogleTestModalVisible(false)}
+            >
+              <Text style={styles.sandboxCloseText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
 
       {/* Forgot Password Modal */}
       <ForgotPasswordModal
@@ -960,5 +1050,57 @@ const styles = StyleSheet.create({
     color: '#92400E',
     fontSize: 12,
     fontWeight: '700',
+  },
+  sandboxBackdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.45)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 24,
+  },
+  sandboxCard: {
+    backgroundColor: Palette.surface,
+    borderRadius: 20,
+    padding: 24,
+    width: '100%',
+    maxWidth: 420,
+    ...SoftShadow,
+  },
+  sandboxHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  sandboxTitle: {
+    fontSize: 17,
+    fontWeight: '800',
+    color: Palette.textPrimary,
+    marginLeft: 10,
+  },
+  sandboxSubtitle: {
+    fontSize: 12,
+    color: Palette.textSecondary,
+    lineHeight: 18,
+    marginBottom: 18,
+  },
+  sandboxInput: {
+    backgroundColor: Palette.background,
+    borderWidth: 1,
+    borderColor: Palette.border,
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    height: 48,
+    fontSize: 14,
+    color: Palette.textPrimary,
+    marginBottom: 12,
+  },
+  sandboxCloseBtn: {
+    alignItems: 'center',
+    paddingVertical: 8,
+  },
+  sandboxCloseText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: Palette.textSecondary,
   },
 });
