@@ -11,12 +11,25 @@ import {
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { PaperProvider, MD3LightTheme } from 'react-native-paper';
+import { Home, MessageSquare, Store, BarChart3, User } from 'lucide-react-native';
 import Toast from 'react-native-toast-message';
 import { AuthProvider, useAuth } from './src/context/AuthContext';
 import { AuthScreen } from './src/screens/AuthScreen';
 import { ProfileScreen } from './src/screens/ProfileScreen';
 import { SocialScreen } from './src/screens/SocialScreen';
 import { BiometricPromptModal } from './src/components/BiometricPromptModal';
+
+const theme = {
+  ...MD3LightTheme,
+  colors: {
+    ...MD3LightTheme.colors,
+    primary: '#1E3A8A',
+    secondary: '#3B82F6',
+    background: '#F8FAFC',
+    surface: '#FFFFFF',
+  },
+};
 
 type NavigationTab = 'home' | 'social' | 'marketplace' | 'business' | 'profile';
 
@@ -169,7 +182,7 @@ const MainAppContent: React.FC = () => {
           style={[styles.tabButton, activeTab === 'home' && styles.tabButtonActive]}
           onPress={() => setActiveTab('home')}
         >
-          <Text style={styles.tabIcon}>🏠</Text>
+          <Home size={20} color={activeTab === 'home' ? '#1E3A8A' : '#64748B'} strokeWidth={activeTab === 'home' ? 2.5 : 1.8} />
           <Text style={[styles.tabText, activeTab === 'home' && styles.tabTextActive]}>Home</Text>
         </TouchableOpacity>
 
@@ -177,7 +190,7 @@ const MainAppContent: React.FC = () => {
           style={[styles.tabButton, activeTab === 'social' && styles.tabButtonActive]}
           onPress={() => setActiveTab('social')}
         >
-          <Text style={styles.tabIcon}>💬</Text>
+          <MessageSquare size={20} color={activeTab === 'social' ? '#1E3A8A' : '#64748B'} strokeWidth={activeTab === 'social' ? 2.5 : 1.8} />
           <Text style={[styles.tabText, activeTab === 'social' && styles.tabTextActive]}>Social</Text>
         </TouchableOpacity>
 
@@ -185,7 +198,7 @@ const MainAppContent: React.FC = () => {
           style={[styles.tabButton, activeTab === 'marketplace' && styles.tabButtonActive]}
           onPress={() => setActiveTab('marketplace')}
         >
-          <Text style={styles.tabIcon}>🏪</Text>
+          <Store size={20} color={activeTab === 'marketplace' ? '#1E3A8A' : '#64748B'} strokeWidth={activeTab === 'marketplace' ? 2.5 : 1.8} />
           <Text style={[styles.tabText, activeTab === 'marketplace' && styles.tabTextActive]}>Market</Text>
         </TouchableOpacity>
 
@@ -193,7 +206,7 @@ const MainAppContent: React.FC = () => {
           style={[styles.tabButton, activeTab === 'business' && styles.tabButtonActive]}
           onPress={() => setActiveTab('business')}
         >
-          <Text style={styles.tabIcon}>📊</Text>
+          <BarChart3 size={20} color={activeTab === 'business' ? '#1E3A8A' : '#64748B'} strokeWidth={activeTab === 'business' ? 2.5 : 1.8} />
           <Text style={[styles.tabText, activeTab === 'business' && styles.tabTextActive]}>Business</Text>
         </TouchableOpacity>
 
@@ -201,7 +214,7 @@ const MainAppContent: React.FC = () => {
           style={[styles.tabButton, activeTab === 'profile' && styles.tabButtonActive]}
           onPress={() => setActiveTab('profile')}
         >
-          <Text style={styles.tabIcon}>👤</Text>
+          <User size={20} color={activeTab === 'profile' ? '#1E3A8A' : '#64748B'} strokeWidth={activeTab === 'profile' ? 2.5 : 1.8} />
           <Text style={[styles.tabText, activeTab === 'profile' && styles.tabTextActive]}>Profile</Text>
         </TouchableOpacity>
       </View>
@@ -212,10 +225,12 @@ const MainAppContent: React.FC = () => {
 export default function App() {
   return (
     <SafeAreaProvider>
-      <AuthProvider>
-        <MainAppContent />
-        <Toast />
-      </AuthProvider>
+      <PaperProvider theme={theme}>
+        <AuthProvider>
+          <MainAppContent />
+          <Toast />
+        </AuthProvider>
+      </PaperProvider>
     </SafeAreaProvider>
   );
 }

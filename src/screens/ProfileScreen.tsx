@@ -8,6 +8,8 @@ import {
   Alert,
 } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
+import { ShieldCheck, Building2, LogOut, QrCode, Award } from 'lucide-react-native';
+import Toast from 'react-native-toast-message';
 import { useAuth, CompanySummary } from '../context/AuthContext';
 
 export const ProfileScreen: React.FC = () => {
@@ -55,7 +57,10 @@ export const ProfileScreen: React.FC = () => {
       {/* Customer QR Passport Card */}
       <View style={styles.passportCard}>
         <View style={styles.passportHeader}>
-          <Text style={styles.passportTitle}>Digital Customer Passport</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+            <QrCode size={18} color="#1E3A8A" />
+            <Text style={styles.passportTitle}>Digital Customer Passport</Text>
+          </View>
           <View style={styles.customerIdPill}>
             <Text style={styles.customerIdText}>{user?.customerId || 'TB-C000000'}</Text>
           </View>
@@ -124,6 +129,7 @@ export const ProfileScreen: React.FC = () => {
 
       {/* Account Actions */}
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+        <LogOut size={16} color="#DC2626" style={{ marginRight: 6 }} />
         <Text style={styles.logoutButtonText}>Log Out from TredBook</Text>
       </TouchableOpacity>
 
@@ -337,6 +343,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FEE2E2',
     height: 48,
     borderRadius: 12,
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,

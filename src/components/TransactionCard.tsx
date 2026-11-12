@@ -7,6 +7,7 @@ import {
   Linking,
   Alert,
 } from 'react-native';
+import { Receipt, FileText, ShieldCheck, Zap, ExternalLink, Check } from 'lucide-react-native';
 
 export interface TransactionCardProps {
   type: string;
@@ -49,7 +50,10 @@ export const TransactionCard: React.FC<TransactionCardProps> = ({ type, metadata
       <View style={styles.cardContainer}>
         {/* Card Header */}
         <View style={styles.headerRow}>
-          <Text style={styles.cardTypeTitle}>🧾 GST Tax Invoice</Text>
+          <View style={styles.titleWithIcon}>
+            <Receipt size={16} color="#1E3A8A" strokeWidth={2.2} />
+            <Text style={styles.cardTypeTitle}>GST Tax Invoice</Text>
+          </View>
           <View style={[styles.statusBadge, isPaid ? styles.statusPaid : styles.statusUnpaid]}>
             <Text style={[styles.statusText, isPaid ? styles.statusTextPaid : styles.statusTextUnpaid]}>
               {metadata.status || 'UNPAID'}
@@ -72,11 +76,13 @@ export const TransactionCard: React.FC<TransactionCardProps> = ({ type, metadata
         <View style={styles.actionRow}>
           {!isPaid && (
             <TouchableOpacity style={styles.payButton} onPress={handlePayUpi}>
-              <Text style={styles.payButtonText}>⚡ Pay via UPI</Text>
+              <Zap size={14} color="#FFFFFF" strokeWidth={2.5} style={{ marginRight: 4 }} />
+              <Text style={styles.payButtonText}>Pay via UPI</Text>
             </TouchableOpacity>
           )}
           <TouchableOpacity style={styles.viewButton} onPress={handleViewDetails}>
-            <Text style={styles.viewButtonText}>📄 View Invoice</Text>
+            <ExternalLink size={13} color="#1E3A8A" style={{ marginRight: 4 }} />
+            <Text style={styles.viewButtonText}>View Invoice</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -87,7 +93,10 @@ export const TransactionCard: React.FC<TransactionCardProps> = ({ type, metadata
     return (
       <View style={styles.cardContainer}>
         <View style={styles.headerRow}>
-          <Text style={styles.cardTypeTitle}>📋 Price Quotation</Text>
+          <View style={styles.titleWithIcon}>
+            <FileText size={16} color="#B45309" strokeWidth={2.2} />
+            <Text style={styles.cardTypeTitle}>Price Quotation</Text>
+          </View>
           <View style={[styles.statusBadge, { backgroundColor: '#FEF3C7' }]}>
             <Text style={[styles.statusText, { color: '#92400E' }]}>VALID 7 DAYS</Text>
           </View>
@@ -102,7 +111,8 @@ export const TransactionCard: React.FC<TransactionCardProps> = ({ type, metadata
             style={[styles.payButton, { backgroundColor: '#15803D' }]}
             onPress={() => Alert.alert('Quotation Accepted', 'Order has been placed with merchant.')}
           >
-            <Text style={styles.payButtonText}>✓ Accept Quotation</Text>
+            <Check size={14} color="#FFFFFF" strokeWidth={2.5} style={{ marginRight: 4 }} />
+            <Text style={styles.payButtonText}>Accept Quotation</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -113,7 +123,10 @@ export const TransactionCard: React.FC<TransactionCardProps> = ({ type, metadata
     return (
       <View style={styles.cardContainer}>
         <View style={styles.headerRow}>
-          <Text style={styles.cardTypeTitle}>🛡️ Digital Warranty</Text>
+          <View style={styles.titleWithIcon}>
+            <ShieldCheck size={16} color="#15803D" strokeWidth={2.2} />
+            <Text style={styles.cardTypeTitle}>Digital Warranty</Text>
+          </View>
           <View style={[styles.statusBadge, { backgroundColor: '#DCFCE7' }]}>
             <Text style={[styles.statusText, { color: '#15803D' }]}>ACTIVE</Text>
           </View>
@@ -154,6 +167,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 6,
+  },
+  titleWithIcon: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
   },
   cardTypeTitle: {
     fontSize: 13,
