@@ -51,7 +51,7 @@ export const TransactionCard: React.FC<TransactionCardProps> = ({ type, metadata
         {/* Card Header */}
         <View style={styles.headerRow}>
           <View style={styles.titleWithIcon}>
-            <Receipt size={16} color="#1E3A8A" strokeWidth={2.2} />
+            <Receipt size={16} color="#0284C7" strokeWidth={2.2} />
             <Text style={styles.cardTypeTitle}>GST Tax Invoice</Text>
           </View>
           <View style={[styles.statusBadge, isPaid ? styles.statusPaid : styles.statusUnpaid]}>
@@ -81,7 +81,7 @@ export const TransactionCard: React.FC<TransactionCardProps> = ({ type, metadata
             </TouchableOpacity>
           )}
           <TouchableOpacity style={styles.viewButton} onPress={handleViewDetails}>
-            <ExternalLink size={13} color="#1E3A8A" style={{ marginRight: 4 }} />
+            <ExternalLink size={13} color="#0284C7" style={{ marginRight: 4 }} />
             <Text style={styles.viewButtonText}>View Invoice</Text>
           </TouchableOpacity>
         </View>
@@ -234,10 +234,15 @@ const styles = StyleSheet.create({
   },
   payButton: {
     flex: 1,
-    backgroundColor: '#1E3A8A',
+    backgroundColor: '#0284C7',
     borderRadius: 8,
     paddingVertical: 9,
     alignItems: 'center',
+    shadowColor: '#0284C7',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 2,
   },
   payButtonText: {
     color: '#FFFFFF',
@@ -246,15 +251,15 @@ const styles = StyleSheet.create({
   },
   viewButton: {
     flex: 1,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: '#F0F9FF',
     borderRadius: 8,
     paddingVertical: 9,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#CBD5E1',
+    borderColor: '#BAE6FD',
   },
   viewButtonText: {
-    color: '#334155',
+    color: '#0284C7',
     fontSize: 12,
     fontWeight: '700',
   },

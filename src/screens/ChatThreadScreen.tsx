@@ -183,7 +183,7 @@ export const ChatThreadScreen: React.FC<ChatThreadScreenProps> = ({
       {/* Message Feed */}
       {isLoading ? (
         <View style={styles.loadingBox}>
-          <ActivityIndicator color="#1E3A8A" />
+          <ActivityIndicator color="#0284C7" />
         </View>
       ) : (
         <FlatList
@@ -221,7 +221,7 @@ export const ChatThreadScreen: React.FC<ChatThreadScreenProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: '#FFFFFF',
   },
   header: {
     flexDirection: 'row',
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     fontSize: 22,
-    color: '#1E3A8A',
+    color: '#0284C7',
     fontWeight: '700',
   },
   headerInfo: {
@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
   },
   headerStatus: {
     fontSize: 11,
-    color: '#16A34A',
+    color: '#0284C7',
     fontWeight: '600',
   },
   loadingBox: {
@@ -261,6 +261,7 @@ const styles = StyleSheet.create({
   messageList: {
     padding: 16,
     paddingBottom: 24,
+    backgroundColor: '#FFFFFF',
   },
   bubbleWrapper: {
     marginBottom: 12,
@@ -284,11 +285,16 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   myBubble: {
-    backgroundColor: '#1E3A8A',
+    backgroundColor: '#0284C7',
     borderBottomRightRadius: 4,
+    shadowColor: '#0284C7',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 2,
   },
   peerBubble: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F8FAFC',
     borderBottomLeftRadius: 4,
     borderWidth: 1,
     borderColor: '#E2E8F0',
@@ -308,7 +314,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   myTimestamp: {
-    color: '#93C5FD',
+    color: '#E0F2FE',
   },
   inputContainer: {
     flexDirection: 'row',
@@ -323,14 +329,16 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: '#F0F9FF',
+    borderWidth: 1,
+    borderColor: '#BAE6FD',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 8,
   },
   attachIcon: {
     fontSize: 22,
-    color: '#1E3A8A',
+    color: '#0284C7',
     fontWeight: '700',
     marginTop: -2,
   },
@@ -352,10 +360,15 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: '#1E3A8A',
+    backgroundColor: '#0284C7',
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: 8,
+    shadowColor: '#0284C7',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 2,
   },
   sendButtonText: {
     fontSize: 16,

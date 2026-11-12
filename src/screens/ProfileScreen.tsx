@@ -95,7 +95,7 @@ export const ProfileScreen: React.FC = () => {
       <View style={styles.passportCard}>
         <View style={styles.passportHeader}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-            <QrCode size={18} color="#1E3A8A" />
+            <QrCode size={18} color="#0284C7" />
             <Text style={styles.passportTitle}>Digital Customer Passport</Text>
           </View>
           <View style={styles.customerIdPill}>
@@ -107,7 +107,7 @@ export const ProfileScreen: React.FC = () => {
           <QRCode
             value={`tredbook:customer:${user?.customerId || user?.id}`}
             size={180}
-            color="#1E3A8A"
+            color="#0284C7"
             backgroundColor="#FFFFFF"
           />
         </View>
@@ -167,7 +167,7 @@ export const ProfileScreen: React.FC = () => {
       {/* Security & Biometrics Section */}
       <View style={styles.sectionCard}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 4 }}>
-          <ShieldCheck size={18} color="#1E3A8A" />
+          <ShieldCheck size={18} color="#0284C7" />
           <Text style={styles.sectionTitle}>Security & Quick Sign-In</Text>
         </View>
         <Text style={styles.sectionSubtitle}>
@@ -177,7 +177,7 @@ export const ProfileScreen: React.FC = () => {
         <View style={styles.biometricRow}>
           <View style={{ flex: 1, marginRight: 12 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-              <Fingerprint size={16} color="#1E3A8A" />
+              <Fingerprint size={16} color="#0284C7" />
               <Text style={styles.biometricLabel}>Fingerprint / FaceID Login</Text>
             </View>
             <Text style={styles.biometricSub}>
@@ -192,8 +192,8 @@ export const ProfileScreen: React.FC = () => {
             value={isBiometricEnabled}
             onValueChange={handleBiometricToggle}
             disabled={!isBiometricSupported}
-            trackColor={{ false: '#CBD5E1', true: '#93C5FD' }}
-            thumbColor={isBiometricEnabled ? '#1E3A8A' : '#F1F5F9'}
+            trackColor={{ false: '#CBD5E1', true: '#BAE6FD' }}
+            thumbColor={isBiometricEnabled ? '#0284C7' : '#F1F5F9'}
           />
         </View>
       </View>
@@ -212,7 +212,7 @@ export const ProfileScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
   },
   contentContainer: {
     padding: 20,
@@ -225,14 +225,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
-    borderWidth: 1,
+    borderWidth: 1.5,
     borderColor: '#E2E8F0',
+    shadowColor: '#0284C7',
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 2,
   },
   avatarCircle: {
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: '#1E3A8A',
+    backgroundColor: '#0284C7',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 16,
@@ -277,9 +281,9 @@ const styles = StyleSheet.create({
     padding: 24,
     alignItems: 'center',
     marginBottom: 20,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-    shadowColor: '#1E3A8A',
+    borderWidth: 1.5,
+    borderColor: '#BAE6FD',
+    shadowColor: '#0284C7',
     shadowOpacity: 0.08,
     shadowRadius: 16,
     elevation: 3,
@@ -297,7 +301,7 @@ const styles = StyleSheet.create({
     color: '#0F172A',
   },
   customerIdPill: {
-    backgroundColor: '#1E3A8A',
+    backgroundColor: '#0284C7',
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 8,
@@ -357,10 +361,15 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   createCompanyBtn: {
-    backgroundColor: '#1E3A8A',
+    backgroundColor: '#0284C7',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 8,
+    shadowColor: '#0284C7',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 2,
   },
   createCompanyBtnText: {
     color: '#FFFFFF',
@@ -373,14 +382,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 14,
     borderRadius: 10,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
     borderWidth: 1,
     borderColor: '#E2E8F0',
     marginBottom: 10,
   },
   companyRowActive: {
-    borderColor: '#3B82F6',
-    backgroundColor: '#EFF6FF',
+    borderColor: '#0284C7',
+    backgroundColor: '#F0F9FF',
   },
   companyInfo: {
     flex: 1,
@@ -391,7 +400,7 @@ const styles = StyleSheet.create({
     color: '#334155',
   },
   companyNameActive: {
-    color: '#1E3A8A',
+    color: '#0284C7',
     fontWeight: '700',
   },
   companyMeta: {
@@ -400,7 +409,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   activePill: {
-    backgroundColor: '#3B82F6',
+    backgroundColor: '#0284C7',
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 6,
@@ -416,16 +425,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 12,
     paddingHorizontal: 14,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#F0F9FF',
     borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderWidth: 1.5,
+    borderColor: '#BAE6FD',
     marginTop: 8,
   },
   biometricLabel: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#1E293B',
+    color: '#0F172A',
   },
   biometricSub: {
     fontSize: 12,

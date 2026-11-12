@@ -24,9 +24,9 @@ const theme = {
   ...MD3LightTheme,
   colors: {
     ...MD3LightTheme.colors,
-    primary: '#1E3A8A',
-    secondary: '#3B82F6',
-    background: '#F8FAFC',
+    primary: '#0284C7',
+    secondary: '#0EA5E9',
+    background: '#FFFFFF',
     surface: '#FFFFFF',
   },
 };
@@ -52,7 +52,7 @@ const MainAppContent: React.FC = () => {
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#1E3A8A" />
+        <ActivityIndicator size="large" color="#0284C7" />
         <Text style={styles.loadingText}>Initializing TredBook...</Text>
       </View>
     );
@@ -182,7 +182,7 @@ const MainAppContent: React.FC = () => {
           style={[styles.tabButton, activeTab === 'home' && styles.tabButtonActive]}
           onPress={() => setActiveTab('home')}
         >
-          <Home size={20} color={activeTab === 'home' ? '#1E3A8A' : '#64748B'} strokeWidth={activeTab === 'home' ? 2.5 : 1.8} />
+          <Home size={20} color={activeTab === 'home' ? '#0284C7' : '#64748B'} strokeWidth={activeTab === 'home' ? 2.5 : 1.8} />
           <Text style={[styles.tabText, activeTab === 'home' && styles.tabTextActive]}>Home</Text>
         </TouchableOpacity>
 
@@ -190,7 +190,7 @@ const MainAppContent: React.FC = () => {
           style={[styles.tabButton, activeTab === 'social' && styles.tabButtonActive]}
           onPress={() => setActiveTab('social')}
         >
-          <MessageSquare size={20} color={activeTab === 'social' ? '#1E3A8A' : '#64748B'} strokeWidth={activeTab === 'social' ? 2.5 : 1.8} />
+          <MessageSquare size={20} color={activeTab === 'social' ? '#0284C7' : '#64748B'} strokeWidth={activeTab === 'social' ? 2.5 : 1.8} />
           <Text style={[styles.tabText, activeTab === 'social' && styles.tabTextActive]}>Social</Text>
         </TouchableOpacity>
 
@@ -198,7 +198,7 @@ const MainAppContent: React.FC = () => {
           style={[styles.tabButton, activeTab === 'marketplace' && styles.tabButtonActive]}
           onPress={() => setActiveTab('marketplace')}
         >
-          <Store size={20} color={activeTab === 'marketplace' ? '#1E3A8A' : '#64748B'} strokeWidth={activeTab === 'marketplace' ? 2.5 : 1.8} />
+          <Store size={20} color={activeTab === 'marketplace' ? '#0284C7' : '#64748B'} strokeWidth={activeTab === 'marketplace' ? 2.5 : 1.8} />
           <Text style={[styles.tabText, activeTab === 'marketplace' && styles.tabTextActive]}>Market</Text>
         </TouchableOpacity>
 
@@ -206,7 +206,7 @@ const MainAppContent: React.FC = () => {
           style={[styles.tabButton, activeTab === 'business' && styles.tabButtonActive]}
           onPress={() => setActiveTab('business')}
         >
-          <BarChart3 size={20} color={activeTab === 'business' ? '#1E3A8A' : '#64748B'} strokeWidth={activeTab === 'business' ? 2.5 : 1.8} />
+          <BarChart3 size={20} color={activeTab === 'business' ? '#0284C7' : '#64748B'} strokeWidth={activeTab === 'business' ? 2.5 : 1.8} />
           <Text style={[styles.tabText, activeTab === 'business' && styles.tabTextActive]}>Business</Text>
         </TouchableOpacity>
 
@@ -214,7 +214,7 @@ const MainAppContent: React.FC = () => {
           style={[styles.tabButton, activeTab === 'profile' && styles.tabButtonActive]}
           onPress={() => setActiveTab('profile')}
         >
-          <User size={20} color={activeTab === 'profile' ? '#1E3A8A' : '#64748B'} strokeWidth={activeTab === 'profile' ? 2.5 : 1.8} />
+          <User size={20} color={activeTab === 'profile' ? '#0284C7' : '#64748B'} strokeWidth={activeTab === 'profile' ? 2.5 : 1.8} />
           <Text style={[styles.tabText, activeTab === 'profile' && styles.tabTextActive]}>Profile</Text>
         </TouchableOpacity>
       </View>
@@ -289,9 +289,9 @@ const styles = StyleSheet.create({
     color: '#15803D',
   },
   companyBadge: {
-    backgroundColor: '#EFF6FF',
+    backgroundColor: '#F0F9FF',
     borderWidth: 1,
-    borderColor: '#BFDBFE',
+    borderColor: '#BAE6FD',
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 8,
@@ -300,20 +300,21 @@ const styles = StyleSheet.create({
   companyBadgeText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#1E3A8A',
+    color: '#0284C7',
   },
   contentContainer: {
     padding: 16,
     paddingBottom: 40,
+    backgroundColor: '#FFFFFF',
   },
   card: {
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 20,
     marginBottom: 16,
-    borderWidth: 1,
+    borderWidth: 1.5,
     borderColor: '#E2E8F0',
-    shadowColor: '#000',
+    shadowColor: '#0284C7',
     shadowOpacity: 0.05,
     shadowRadius: 10,
     elevation: 2,
@@ -335,22 +336,23 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
   metaBox: {
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#F0F9FF',
     borderRadius: 10,
     padding: 12,
     marginBottom: 12,
     borderLeftWidth: 4,
-    borderLeftColor: '#3B82F6',
+    borderLeftColor: '#0284C7',
   },
   metaTitle: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#1E293B',
+    color: '#0F172A',
   },
   metaSub: {
     fontSize: 11,
-    color: '#64748B',
+    color: '#0284C7',
     marginTop: 2,
+    fontWeight: '600',
   },
   tagRow: {
     flexDirection: 'row',
@@ -358,13 +360,15 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   tag: {
-    backgroundColor: '#F1F5F9',
-    color: '#475569',
+    backgroundColor: '#F0F9FF',
+    color: '#0284C7',
     fontSize: 11,
     fontWeight: '600',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
+    borderWidth: 1,
+    borderColor: '#BAE6FD',
   },
   tabBar: {
     flexDirection: 'row',
@@ -381,7 +385,7 @@ const styles = StyleSheet.create({
   },
   tabButtonActive: {
     borderTopWidth: 2,
-    borderTopColor: '#1E3A8A',
+    borderTopColor: '#0284C7',
   },
   tabIcon: {
     fontSize: 18,
@@ -393,7 +397,7 @@ const styles = StyleSheet.create({
     color: '#64748B',
   },
   tabTextActive: {
-    color: '#1E3A8A',
+    color: '#0284C7',
     fontWeight: '700',
   },
 });

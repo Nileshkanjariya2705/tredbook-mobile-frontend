@@ -270,14 +270,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       channel,
       newPassword,
     });
-    if (res.data?.accessToken) {
-      await tokenStorage.set('access_token', res.data.accessToken);
-      if (res.data.refreshToken) {
-        await tokenStorage.set('refresh_token', res.data.refreshToken);
-        await tokenStorage.set('biometric_refresh_token', res.data.refreshToken);
-      }
-      await refreshProfile();
-    }
+    // Do NOT auto-login. User must authenticate with their new credentials.
     return res.data;
   };
 

@@ -548,7 +548,19 @@ export const AuthScreen: React.FC = () => {
       <ForgotPasswordModal
         visible={isForgotModalVisible}
         onClose={() => setIsForgotModalVisible(false)}
-        onSuccess={() => setIsForgotModalVisible(false)}
+        onSuccess={(dest) => {
+          setIsForgotModalVisible(false);
+          setActiveTab('password');
+          if (dest) {
+            setLoginInput(dest);
+          }
+          setPassword('');
+          Toast.show({
+            type: 'info',
+            text1: 'Sign In Required',
+            text2: 'Please enter your newly set password to sign in.',
+          });
+        }}
       />
     </KeyboardAvoidingView>
   );
@@ -557,7 +569,7 @@ export const AuthScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
   },
   scrollContent: {
     padding: 24,
@@ -571,7 +583,7 @@ const styles = StyleSheet.create({
   brandLogo: {
     fontSize: 32,
     fontWeight: '800',
-    color: '#1E3A8A',
+    color: '#0284C7',
     letterSpacing: -0.5,
   },
   brandTagline: {
@@ -582,7 +594,7 @@ const styles = StyleSheet.create({
   },
   tabContainer: {
     flexDirection: 'row',
-    backgroundColor: '#E2E8F0',
+    backgroundColor: '#F1F5F9',
     borderRadius: 10,
     padding: 3,
     marginBottom: 18,
@@ -606,17 +618,17 @@ const styles = StyleSheet.create({
     color: '#64748B',
   },
   tabTextActive: {
-    color: '#1E3A8A',
+    color: '#0284C7',
     fontWeight: '700',
   },
   card: {
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 20,
-    borderWidth: 1,
+    borderWidth: 1.5,
     borderColor: '#E2E8F0',
-    shadowColor: '#000',
-    shadowOpacity: 0.04,
+    shadowColor: '#0284C7',
+    shadowOpacity: 0.06,
     shadowRadius: 10,
     elevation: 2,
   },
@@ -632,7 +644,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   countryCodeBadge: {
-    backgroundColor: '#F1F5F9',
+    backgroundColor: '#F8FAFC',
     borderWidth: 1,
     borderColor: '#CBD5E1',
     borderRightWidth: 0,
@@ -671,22 +683,27 @@ const styles = StyleSheet.create({
   },
   otpInput: {
     height: 52,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#F0F9FF',
     borderWidth: 2,
-    borderColor: '#3B82F6',
+    borderColor: '#0284C7',
     borderRadius: 12,
     fontSize: 24,
     fontWeight: '800',
     letterSpacing: 8,
-    color: '#1E3A8A',
+    color: '#0284C7',
     marginBottom: 18,
   },
   primaryButton: {
-    backgroundColor: '#1E3A8A',
+    backgroundColor: '#0284C7',
     height: 46,
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
+    shadowColor: '#0284C7',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.25,
+    shadowRadius: 6,
+    elevation: 3,
   },
   primaryButtonText: {
     color: '#FFFFFF',
@@ -695,16 +712,16 @@ const styles = StyleSheet.create({
   },
   biometricButton: {
     marginTop: 12,
-    borderWidth: 1,
-    borderColor: '#93C5FD',
-    backgroundColor: '#EFF6FF',
+    borderWidth: 1.5,
+    borderColor: '#BAE6FD',
+    backgroundColor: '#F0F9FF',
     height: 44,
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
   },
   biometricButtonText: {
-    color: '#1E40AF',
+    color: '#0284C7',
     fontSize: 13,
     fontWeight: '700',
   },
@@ -716,7 +733,7 @@ const styles = StyleSheet.create({
   forgotBtnText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#1E3A8A',
+    color: '#0284C7',
   },
   checkboxRow: {
     flexDirection: 'row',
@@ -734,8 +751,8 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   checkboxChecked: {
-    backgroundColor: '#1E3A8A',
-    borderColor: '#1E3A8A',
+    backgroundColor: '#0284C7',
+    borderColor: '#0284C7',
   },
   checkboxTick: {
     color: '#FFFFFF',
@@ -760,7 +777,7 @@ const styles = StyleSheet.create({
   resendLink: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#2563EB',
+    color: '#0284C7',
   },
   changePhoneLink: {
     fontSize: 12,

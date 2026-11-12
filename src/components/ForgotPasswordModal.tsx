@@ -17,7 +17,7 @@ import { useAuth } from '../context/AuthContext';
 interface ForgotPasswordModalProps {
   visible: boolean;
   onClose: () => void;
-  onSuccess: () => void;
+  onSuccess: (destination?: string) => void;
 }
 
 export const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
@@ -52,25 +52,39 @@ export const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
   };
 
   const handleRequestOtp = async () => {
-    if (!destination.trim()) {
+    const cleanDest = destination.trim();
+    if (!cleanDest) {
       Toast.show({
         type: 'error',
         text1: 'Required Field',
-        text2: channel === 'email' ? 'Please enter your registered email' : 'Please enter your mobile number',
+        text2: channel === 'email' ? 'Please enter your registered email' : 'Please enter your 10-digit mobile number',
       });
       return;
     }
 
+    if (channel === 'phone' && cleanDest.replace(/[^0-9]/g, '').length < 10) {
+      Toast.show({
+        type: 'error',
+        text1: 'Invalid Phone Number',
+        text2: 'Please enter a valid 10-digit mobile number.',
+      });
+      return;
+    }
+
+    const targetDestination = channel === 'phone'
+      ? cleanDest.replace(/[^0-9]/g, '').slice(-10)
+      : cleanDest.toLowerCase();
+
     setLoading(true);
     try {
-      const res = await forgotPassword(destination.trim(), channel);
+      const res = await forgotPassword(targetDestination, channel);
       if (res?.debugOtp) {
         setDebugOtp(res.debugOtp);
       }
       Toast.show({
         type: 'success',
         text1: 'Verification Code Sent',
-        text2: `A 6-digit code has been sent to ${destination.trim()}`,
+        text2: `A 6-digit code has been dispatched.`,
       });
       setStep(2);
     } catch (err: any) {
@@ -114,16 +128,20 @@ export const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
       return;
     }
 
+    const targetDestination = channel === 'phone'
+      ? destination.trim().replace(/[^0-9]/g, '').slice(-10)
+      : destination.trim().toLowerCase();
+
     setLoading(true);
     try {
-      await resetPassword(destination.trim(), code.trim(), channel, newPassword);
+      await resetPassword(targetDestination, code.trim(), channel, newPassword);
       Toast.show({
         type: 'success',
         text1: 'Password Updated',
-        text2: 'Your password has been changed and you are now signed in.',
+        text2: 'Please sign in with your new password.',
       });
       handleClose();
-      onSuccess();
+      onSuccess(targetDestination);
     } catch (err: any) {
       Toast.show({
         type: 'error',
@@ -381,8 +399,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8FAFC',
   },
   channelBtnActive: {
-    borderColor: '#1E3A8A',
-    backgroundColor: '#EFF6FF',
+    borderColor: '#0284C7',
+    backgroundColor: '#F0F9FF',
   },
   channelText: {
     fontSize: 13,
@@ -390,7 +408,7 @@ const styles = StyleSheet.create({
     color: '#64748B',
   },
   channelTextActive: {
-    color: '#1E3A8A',
+    color: '#0284C7',
     fontWeight: '700',
   },
   label: {
@@ -400,7 +418,7 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   input: {
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
     borderWidth: 1.5,
     borderColor: '#E2E8F0',
     borderRadius: 12,
@@ -415,6 +433,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 22,
     fontWeight: '800',
+    borderColor: '#0284C7',
+    backgroundColor: '#F0F9FF',
   },
   debugBox: {
     backgroundColor: '#FEF3C7',
@@ -439,11 +459,11 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   submitBtn: {
-    backgroundColor: '#1E3A8A',
+    backgroundColor: '#0284C7',
     paddingVertical: 14,
     borderRadius: 14,
     alignItems: 'center',
-    shadowColor: '#1E3A8A',
+    shadowColor: '#0284C7',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 8,
@@ -460,7 +480,7 @@ const styles = StyleSheet.create({
     marginTop: 6,
   },
   linkBtnText: {
-    color: '#1E3A8A',
+    color: '#0284C7',
     fontSize: 13,
     fontWeight: '600',
   },

@@ -151,10 +151,15 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   primaryButton: {
-    backgroundColor: '#1E3A8A',
+    backgroundColor: '#0284C7',
     paddingVertical: 14,
     borderRadius: 14,
     alignItems: 'center',
+    shadowColor: '#0284C7',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 3,
   },
   primaryButtonText: {
     color: '#FFFFFF',
