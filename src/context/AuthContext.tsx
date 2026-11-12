@@ -42,6 +42,7 @@ interface AuthContextType {
   sendOtp: (destination: string, channel: 'email' | 'phone', purpose?: string) => Promise<any>;
   verifyOtp: (destination: string, code: string, channel: 'email' | 'phone', purpose?: string, fullName?: string) => Promise<any>;
   loginPassword: (login: string, password: string) => Promise<any>;
+  loginWithGoogle: (idToken: string) => Promise<any>;
   register: (payload: RegisterPayload) => Promise<any>;
   authenticateBiometric: () => Promise<{ success: boolean; message?: string }>;
   toggleBiometrics: (enabled: boolean) => Promise<void>;
@@ -305,6 +306,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return res.data;
   };
 
+  const loginWithGoogle = async (idToken: string) => {
+    const res = await api.post('/auth/google', { idToken });
+    if (res.data?.accessToken) {
+      await tokenStorage.set('access_token', res.data.accessToken);
+      if (res.data.refreshToken) {
+        await tokenStorage.set('refresh_token', res.data.refreshToken);
+        await tokenStorage.set('biometric_refresh_token', res.data.refreshToken);
+      }
+      await refreshProfile();
+    }
+    return res.data;
+  };
+
   const register = async (payload: RegisterPayload) => {
     const res = await api.post('/auth/register', payload);
     if (res.data?.accessToken) {
@@ -343,6 +357,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         sendOtp,
         verifyOtp,
         loginPassword,
+        loginWithGoogle,
         register,
         authenticateBiometric,
         toggleBiometrics,
