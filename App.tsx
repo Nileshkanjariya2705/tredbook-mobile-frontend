@@ -1,123 +1,154 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, ScrollView, Platform } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { AuthProvider, useAuth } from './src/context/AuthContext';
+import { AuthScreen } from './src/screens/AuthScreen';
+import { ProfileScreen } from './src/screens/ProfileScreen';
 
-// 5 Core Navigation Pillars defined in Section 19 of TredBook Master PRD
 type NavigationTab = 'home' | 'social' | 'marketplace' | 'business' | 'profile';
 
-export default function App() {
+const MainAppContent: React.FC = () => {
+  const { user, companies, activeCompanyId, isAuthenticated, isLoading } = useAuth();
   const [activeTab, setActiveTab] = useState<NavigationTab>('home');
+
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#1E3A8A" />
+        <Text style={styles.loadingText}>Initializing TredBook...</Text>
+      </View>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <AuthScreen />;
+  }
+
+  const activeCompany = [
+    ...companies.owned,
+    ...companies.shared,
+  ].find((c) => c.id === activeCompanyId);
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar style="dark" />
-      
+
       {/* Top Header Bar */}
       <View style={styles.header}>
         <View>
           <Text style={styles.headerTitle}>TredBook Super-App</Text>
-          <Text style={styles.headerSubtitle}>Commerce, Community & Accounting</Text>
+          <Text style={styles.headerSubtitle}>
+            {user?.name} • {user?.customerId}
+          </Text>
         </View>
         <View style={styles.badgeRow}>
-          <View style={styles.onlineBadge}>
-            <Text style={styles.onlineBadgeText}>Live</Text>
-          </View>
+          {activeCompany ? (
+            <View style={styles.companyBadge}>
+              <Text style={styles.companyBadgeText}>{activeCompany.name}</Text>
+            </View>
+          ) : (
+            <View style={styles.onlineBadge}>
+              <Text style={styles.onlineBadgeText}>Customer</Text>
+            </View>
+          )}
         </View>
       </View>
 
       {/* Main Workspace */}
-      <ScrollView contentContainerStyle={styles.contentContainer}>
-        {/* Tab 1: Home Dashboard (PRD Section 6.1) */}
-        {activeTab === 'home' && (
-          <View style={styles.card}>
-            <Text style={styles.cardEmoji}>🏠</Text>
-            <Text style={styles.cardTitle}>Customer Home Dashboard</Text>
-            <Text style={styles.cardDesc}>
-              Discover nearby verified shops, browse trending categories, track active orders, view your Digital Purchase Book, and check your loyalty rewards.
-            </Text>
-            <View style={styles.metaBox}>
-              <Text style={styles.metaTitle}>Customer ID: TB-C50245</Text>
-              <Text style={styles.metaSub}>ReliabilityScore (CRS): 750 (Strong)</Text>
+      {activeTab === 'profile' ? (
+        <ProfileScreen />
+      ) : (
+        <ScrollView contentContainerStyle={styles.contentContainer}>
+          {/* Tab 1: Home Dashboard (PRD Section 6.1) */}
+          {activeTab === 'home' && (
+            <View style={styles.card}>
+              <Text style={styles.cardEmoji}>🏠</Text>
+              <Text style={styles.cardTitle}>Customer Home Dashboard</Text>
+              <Text style={styles.cardDesc}>
+                Discover nearby verified shops, browse trending categories, track active orders,
+                view your Digital Purchase Book, and check your loyalty rewards.
+              </Text>
+              <View style={styles.metaBox}>
+                <Text style={styles.metaTitle}>Customer ID: {user?.customerId}</Text>
+                <Text style={styles.metaSub}>ReliabilityScore (CRS): 750 (Strong)</Text>
+              </View>
+              <View style={styles.tagRow}>
+                <Text style={styles.tag}>PRD Section 6.1</Text>
+                <Text style={styles.tag}>Purchase Book Vault</Text>
+                <Text style={styles.tag}>Order Tracking</Text>
+              </View>
             </View>
-            <View style={styles.tagRow}>
-              <Text style={styles.tag}>PRD Section 6.1</Text>
-              <Text style={styles.tag}>Purchase Book Vault</Text>
-              <Text style={styles.tag}>Order Tracking</Text>
-            </View>
-          </View>
-        )}
+          )}
 
-        {/* Tab 2: Social Ecosystem (PRD Section 7 & FN-CHAT) */}
-        {activeTab === 'social' && (
-          <View style={styles.card}>
-            <Text style={styles.cardEmoji}>💬</Text>
-            <Text style={styles.cardTitle}>Social & Real-Time Communication</Text>
-            <Text style={styles.cardDesc}>
-              Real-time 1-on-1 & 1,000-member community rooms, interactive invoice payment cards, quotation cards, 24h stories with product tags, and broadcast channels.
-            </Text>
-            <View style={styles.tagRow}>
-              <Text style={styles.tag}>FN-CHAT-01 to 18</Text>
-              <Text style={styles.tag}>Interactive UPI Cards</Text>
-              <Text style={styles.tag}>24h Stories</Text>
-              <Text style={styles.tag}>Broadcast Channels</Text>
+          {/* Tab 2: Social Ecosystem (PRD Section 7 & FN-CHAT) */}
+          {activeTab === 'social' && (
+            <View style={styles.card}>
+              <Text style={styles.cardEmoji}>💬</Text>
+              <Text style={styles.cardTitle}>Social & Real-Time Communication</Text>
+              <Text style={styles.cardDesc}>
+                Real-time 1-on-1 & 1,000-member community rooms, interactive invoice payment
+                cards, quotation cards, 24h stories with product tags, and broadcast channels.
+              </Text>
+              <View style={styles.tagRow}>
+                <Text style={styles.tag}>FN-CHAT-01 to 18</Text>
+                <Text style={styles.tag}>Interactive UPI Cards</Text>
+                <Text style={styles.tag}>24h Stories</Text>
+                <Text style={styles.tag}>Broadcast Channels</Text>
+              </View>
             </View>
-          </View>
-        )}
+          )}
 
-        {/* Tab 3: Marketplace & Storefront (PRD Section 6 & FN-MKT) */}
-        {activeTab === 'marketplace' && (
-          <View style={styles.card}>
-            <Text style={styles.cardEmoji}>🏪</Text>
-            <Text style={styles.cardTitle}>Marketplace & Digital Storefronts</Text>
-            <Text style={styles.cardDesc}>
-              Hyper-local geo-spatial discovery (1–25 km radius), merchant public storefronts, single-merchant cart checkout, Cash on Delivery, and Pay-at-Store.
-            </Text>
-            <View style={styles.tagRow}>
-              <Text style={styles.tag}>FN-MKT-01 to 20</Text>
-              <Text style={styles.tag}>Geo-Radius Filter</Text>
-              <Text style={styles.tag}>Single-Store Cart</Text>
-              <Text style={styles.tag}>B2B Wholesale</Text>
+          {/* Tab 3: Marketplace & Storefront (PRD Section 6 & FN-MKT) */}
+          {activeTab === 'marketplace' && (
+            <View style={styles.card}>
+              <Text style={styles.cardEmoji}>🏪</Text>
+              <Text style={styles.cardTitle}>Marketplace & Digital Storefronts</Text>
+              <Text style={styles.cardDesc}>
+                Hyper-local geo-spatial discovery (1–25 km radius), merchant public storefronts,
+                single-merchant cart checkout, Cash on Delivery, and Pay-at-Store.
+              </Text>
+              <View style={styles.tagRow}>
+                <Text style={styles.tag}>FN-MKT-01 to 20</Text>
+                <Text style={styles.tag}>Geo-Radius Filter</Text>
+                <Text style={styles.tag}>Single-Store Cart</Text>
+                <Text style={styles.tag}>B2B Wholesale</Text>
+              </View>
             </View>
-          </View>
-        )}
+          )}
 
-        {/* Tab 4: Business Ecosystem & Accounting (PRD Section 5 & tredbook-web) */}
-        {activeTab === 'business' && (
-          <View style={styles.card}>
-            <Text style={styles.cardEmoji}>📊</Text>
-            <Text style={styles.cardTitle}>Business Ecosystem & Accounting</Text>
-            <Text style={styles.cardDesc}>
-              Full business operating system: Accounting & Billing via tredbook-web, inventory, CRM, Unified Business Inbox, and ESC/POS thermal printing bridge.
-            </Text>
-            <View style={styles.metaBox}>
-              <Text style={styles.metaTitle}>Business ID: TB-B10245</Text>
-              <Text style={styles.metaSub}>TrustScore (BTS): 820 (Very Strong)</Text>
+          {/* Tab 4: Business Ecosystem & Accounting (PRD Section 5 & tredbook-web) */}
+          {activeTab === 'business' && (
+            <View style={styles.card}>
+              <Text style={styles.cardEmoji}>📊</Text>
+              <Text style={styles.cardTitle}>Business Ecosystem & Accounting</Text>
+              <Text style={styles.cardDesc}>
+                Full business operating system: Accounting & Billing via tredbook-web, inventory,
+                CRM, Unified Business Inbox, and ESC/POS thermal printing bridge.
+              </Text>
+              <View style={styles.metaBox}>
+                <Text style={styles.metaTitle}>
+                  {activeCompany ? `Active: ${activeCompany.name}` : 'No Business Selected'}
+                </Text>
+                <Text style={styles.metaSub}>TrustScore (BTS): 820 (Very Strong)</Text>
+              </View>
+              <View style={styles.tagRow}>
+                <Text style={styles.tag}>FN-WEB-01 to 73</Text>
+                <Text style={styles.tag}>SSO Web Bridge</Text>
+                <Text style={styles.tag}>Unified Business Inbox</Text>
+                <Text style={styles.tag}>Mode 1/2/3 Sync</Text>
+              </View>
             </View>
-            <View style={styles.tagRow}>
-              <Text style={styles.tag}>FN-WEB-01 to 73</Text>
-              <Text style={styles.tag}>SSO Web Bridge</Text>
-              <Text style={styles.tag}>Unified Business Inbox</Text>
-              <Text style={styles.tag}>Mode 1/2/3 Sync</Text>
-            </View>
-          </View>
-        )}
-
-        {/* Tab 5: Profile & Identity (PRD Section 4 & 11) */}
-        {activeTab === 'profile' && (
-          <View style={styles.card}>
-            <Text style={styles.cardEmoji}>👤</Text>
-            <Text style={styles.cardTitle}>Profile & Trust Management</Text>
-            <Text style={styles.cardDesc}>
-              Unified TredBook account management. Switch between Customer and Business contexts, manage QR code passports, view TrustProfile history, and dispute records.
-            </Text>
-            <View style={styles.tagRow}>
-              <Text style={styles.tag}>Unified Account</Text>
-              <Text style={styles.tag}>TrustProfile (BTS/CRS)</Text>
-              <Text style={styles.tag}>KYC Verification</Text>
-            </View>
-          </View>
-        )}
-      </ScrollView>
+          )}
+        </ScrollView>
+      )}
 
       {/* 5-Item Bottom Navigation Bar (PRD Section 19) */}
       <View style={styles.tabBar}>
@@ -163,33 +194,53 @@ export default function App() {
       </View>
     </SafeAreaView>
   );
+};
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <MainAppContent />
+    </AuthProvider>
+  );
 }
 
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
+    backgroundColor: '#FFFFFF',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: '#F8FAFC',
-    paddingTop: Platform.OS === 'android' ? 35 : 0,
+  },
+  loadingText: {
+    marginTop: 12,
+    fontSize: 14,
+    color: '#64748B',
+    fontWeight: '600',
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 14,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
     borderBottomColor: '#E2E8F0',
   },
   headerTitle: {
-    fontSize: 20,
-    fontWeight: '700',
+    fontSize: 18,
+    fontWeight: '800',
     color: '#0F172A',
   },
   headerSubtitle: {
     fontSize: 12,
     color: '#64748B',
     marginTop: 2,
+    fontWeight: '600',
   },
   badgeRow: {
     flexDirection: 'row',
@@ -197,73 +248,90 @@ const styles = StyleSheet.create({
   },
   onlineBadge: {
     backgroundColor: '#DCFCE7',
-    paddingHorizontal: 10,
+    paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: 12,
+    borderRadius: 6,
   },
   onlineBadgeText: {
     fontSize: 11,
-    fontWeight: '600',
-    color: '#16A34A',
+    fontWeight: '700',
+    color: '#15803D',
+  },
+  companyBadge: {
+    backgroundColor: '#EFF6FF',
+    borderWidth: 1,
+    borderColor: '#BFDBFE',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 8,
+    maxWidth: 140,
+  },
+  companyBadgeText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#1E3A8A',
   },
   contentContainer: {
-    padding: 20,
+    padding: 16,
+    paddingBottom: 40,
   },
   card: {
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
+    marginBottom: 16,
     borderWidth: 1,
     borderColor: '#E2E8F0',
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 2,
   },
   cardEmoji: {
-    fontSize: 36,
-    marginBottom: 12,
+    fontSize: 32,
+    marginBottom: 8,
   },
   cardTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1E293B',
-    marginBottom: 8,
+    color: '#0F172A',
+    marginBottom: 6,
   },
   cardDesc: {
-    fontSize: 14,
+    fontSize: 13,
     color: '#475569',
     lineHeight: 20,
-    marginBottom: 16,
+    marginBottom: 14,
   },
   metaBox: {
-    backgroundColor: '#F1F5F9',
-    borderRadius: 8,
+    backgroundColor: '#F8FAFC',
+    borderRadius: 10,
     padding: 12,
-    marginBottom: 16,
+    marginBottom: 12,
+    borderLeftWidth: 4,
+    borderLeftColor: '#3B82F6',
   },
   metaTitle: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: '700',
-    color: '#0F172A',
+    color: '#1E293B',
   },
   metaSub: {
-    fontSize: 12,
-    color: '#475569',
+    fontSize: 11,
+    color: '#64748B',
     marginTop: 2,
   },
   tagRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
+    gap: 6,
   },
   tag: {
-    backgroundColor: '#EEF2FF',
-    color: '#4F46E5',
-    fontSize: 12,
+    backgroundColor: '#F1F5F9',
+    color: '#475569',
+    fontSize: 11,
     fontWeight: '600',
-    paddingHorizontal: 10,
+    paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
   },
@@ -272,29 +340,29 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderTopWidth: 1,
     borderTopColor: '#E2E8F0',
-    paddingVertical: 8,
-    paddingHorizontal: 8,
+    paddingBottom: 8,
+    paddingTop: 6,
   },
   tabButton: {
     flex: 1,
     alignItems: 'center',
-    paddingVertical: 6,
-    borderRadius: 8,
+    paddingVertical: 4,
   },
   tabButtonActive: {
-    backgroundColor: '#F1F5F9',
+    borderTopWidth: 2,
+    borderTopColor: '#1E3A8A',
   },
   tabIcon: {
-    fontSize: 20,
+    fontSize: 18,
     marginBottom: 2,
   },
   tabText: {
-    fontSize: 11,
-    fontWeight: '500',
+    fontSize: 10,
+    fontWeight: '600',
     color: '#64748B',
   },
   tabTextActive: {
-    color: '#2563EB',
+    color: '#1E3A8A',
     fontWeight: '700',
   },
 });
