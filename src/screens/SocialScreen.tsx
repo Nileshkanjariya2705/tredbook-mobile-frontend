@@ -12,6 +12,7 @@ import {
 import { api } from '../services/api';
 import { ChatThreadScreen } from './ChatThreadScreen';
 import { useAuth } from '../context/AuthContext';
+import { StorySkeletonRow, ThreadSkeletonList } from '../components/SkeletonLoader';
 
 export interface ThreadItem {
   id: string;
@@ -149,38 +150,42 @@ export const SocialScreen: React.FC = () => {
     <View style={styles.container}>
       {/* 24h Ephemeral Stories Bar (PRD Section 7 & FN-CHAT-08) */}
       <View style={styles.storiesSection}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.storiesScroll}>
-          {/* Add My Story */}
-          <TouchableOpacity style={styles.storyCircleWrapper} onPress={handleCreatePostStory}>
-            <View style={[styles.storyCircle, styles.addStoryCircle]}>
-              <Text style={styles.addStoryPlus}>+</Text>
-            </View>
-            <Text style={styles.storyName}>Your Story</Text>
-          </TouchableOpacity>
-
-          {/* Peer Stories */}
-          {stories.map((s) => (
-            <TouchableOpacity
-              key={s.userId}
-              style={styles.storyCircleWrapper}
-              onPress={() =>
-                Alert.alert(
-                  `${s.userName}'s Story`,
-                  s.stories.map((st) => `• ${st.caption || 'Deal image'}`).join('\n\n'),
-                )
-              }
-            >
-              <View style={[styles.storyCircle, styles.activeStoryCircle]}>
-                <Text style={styles.storyAvatarText}>
-                  {s.userName.slice(0, 2).toUpperCase()}
-                </Text>
+        {isLoading ? (
+          <StorySkeletonRow />
+        ) : (
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.storiesScroll}>
+            {/* Add My Story */}
+            <TouchableOpacity style={styles.storyCircleWrapper} onPress={handleCreatePostStory}>
+              <View style={[styles.storyCircle, styles.addStoryCircle]}>
+                <Text style={styles.addStoryPlus}>+</Text>
               </View>
-              <Text style={styles.storyName} numberOfLines={1}>
-                {s.userName.split(' ')[0]}
-              </Text>
+              <Text style={styles.storyName}>Your Story</Text>
             </TouchableOpacity>
-          ))}
-        </ScrollView>
+
+            {/* Peer Stories */}
+            {stories.map((s) => (
+              <TouchableOpacity
+                key={s.userId}
+                style={styles.storyCircleWrapper}
+                onPress={() =>
+                  Alert.alert(
+                    `${s.userName}'s Story`,
+                    s.stories.map((st) => `• ${st.caption || 'Deal image'}`).join('\n\n'),
+                  )
+                }
+              >
+                <View style={[styles.storyCircle, styles.activeStoryCircle]}>
+                  <Text style={styles.storyAvatarText}>
+                    {s.userName.slice(0, 2).toUpperCase()}
+                  </Text>
+                </View>
+                <Text style={styles.storyName} numberOfLines={1}>
+                  {s.userName.split(' ')[0]}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        )}
       </View>
 
       {/* Conversations List Header */}
@@ -193,9 +198,7 @@ export const SocialScreen: React.FC = () => {
 
       {/* Chat List */}
       {isLoading ? (
-        <View style={styles.loadingBox}>
-          <ActivityIndicator color="#1E3A8A" />
-        </View>
+        <ThreadSkeletonList count={5} />
       ) : threads.length === 0 ? (
         <View style={styles.emptyInbox}>
           <Text style={styles.emptyEmoji}>💬</Text>

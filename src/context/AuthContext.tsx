@@ -45,6 +45,11 @@ interface AuthContextType {
   register: (payload: RegisterPayload) => Promise<any>;
   authenticateBiometric: () => Promise<boolean>;
   toggleBiometrics: (enabled: boolean) => Promise<void>;
+  hasDismissedBiometricPrompt: boolean;
+  dismissBiometricPrompt: () => Promise<void>;
+  enableBiometricsPostLogin: () => Promise<boolean>;
+  forgotPassword: (destination: string, channel: 'email' | 'phone') => Promise<any>;
+  resetPassword: (destination: string, code: string, channel: 'email' | 'phone', newPassword: string) => Promise<any>;
   logout: () => Promise<void>;
   refreshProfile: () => Promise<void>;
 }
@@ -61,6 +66,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isBiometricSupported, setIsBiometricSupported] = useState<boolean>(false);
   const [isBiometricEnabled, setIsBiometricEnabled] = useState<boolean>(false);
+  const [hasDismissedBiometricPrompt, setHasDismissedBiometricPrompt] = useState<boolean>(false);
 
   const refreshProfile = async () => {
     try {
@@ -93,6 +99,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         const bioSetting = await tokenStorage.get('biometrics_enabled');
         setIsBiometricEnabled(bioSetting === 'true');
+
+        const dismissedSetting = await tokenStorage.get('biometric_prompt_dismissed');
+        setHasDismissedBiometricPrompt(dismissedSetting === 'true');
       } catch {
         setIsBiometricSupported(false);
       }
@@ -128,6 +137,57 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const toggleBiometrics = async (enabled: boolean) => {
     setIsBiometricEnabled(enabled);
     await tokenStorage.set('biometrics_enabled', enabled ? 'true' : 'false');
+  };
+
+  const dismissBiometricPrompt = async () => {
+    setHasDismissedBiometricPrompt(true);
+    await tokenStorage.set('biometric_prompt_dismissed', 'true');
+  };
+
+  const enableBiometricsPostLogin = async (): Promise<boolean> => {
+    try {
+      const res = await LocalAuthentication.authenticateAsync({
+        promptMessage: 'Confirm Biometrics to Enable Quick Login',
+        fallbackLabel: 'Cancel',
+      });
+      if (res.success) {
+        setIsBiometricEnabled(true);
+        await tokenStorage.set('biometrics_enabled', 'true');
+        setHasDismissedBiometricPrompt(true);
+        await tokenStorage.set('biometric_prompt_dismissed', 'true');
+        return true;
+      }
+      return false;
+    } catch {
+      return false;
+    }
+  };
+
+  const forgotPassword = async (destination: string, channel: 'email' | 'phone') => {
+    const res = await api.post('/auth/forgot-password', { destination, channel });
+    return res.data;
+  };
+
+  const resetPassword = async (
+    destination: string,
+    code: string,
+    channel: 'email' | 'phone',
+    newPassword: string,
+  ) => {
+    const res = await api.post('/auth/reset-password', {
+      destination,
+      code,
+      channel,
+      newPassword,
+    });
+    if (res.data?.accessToken) {
+      await tokenStorage.set('access_token', res.data.accessToken);
+      if (res.data.refreshToken) {
+        await tokenStorage.set('refresh_token', res.data.refreshToken);
+      }
+      await refreshProfile();
+    }
+    return res.data;
   };
 
   const sendOtp = async (destination: string, channel: 'email' | 'phone', purpose: string = 'login') => {
@@ -190,12 +250,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isAuthenticated: !!user,
         isBiometricSupported,
         isBiometricEnabled,
+        hasDismissedBiometricPrompt,
+        dismissBiometricPrompt,
+        enableBiometricsPostLogin,
         sendOtp,
         verifyOtp,
         loginPassword,
         register,
         authenticateBiometric,
         toggleBiometrics,
+        forgotPassword,
+        resetPassword,
         logout,
         refreshProfile,
       }}

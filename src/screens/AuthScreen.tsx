@@ -9,9 +9,12 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  Alert,
+  StatusBar as StatusBarNative,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Toast from 'react-native-toast-message';
 import { useAuth } from '../context/AuthContext';
+import { ForgotPasswordModal } from '../components/ForgotPasswordModal';
 
 export const AuthScreen: React.FC = () => {
   const {
@@ -22,8 +25,10 @@ export const AuthScreen: React.FC = () => {
     isBiometricSupported,
     authenticateBiometric,
   } = useAuth();
+  const insets = useSafeAreaInsets();
 
   const [activeTab, setActiveTab] = useState<'otp' | 'password' | 'register'>('otp');
+  const [isForgotModalVisible, setIsForgotModalVisible] = useState(false);
 
   // OTP State
   const [phone, setPhone] = useState('');
@@ -57,6 +62,11 @@ export const AuthScreen: React.FC = () => {
 
   const handleSendOtp = async () => {
     if (!phone || phone.length < 10) {
+      Toast.show({
+        type: 'error',
+        text1: 'Invalid Phone Number',
+        text2: 'Please enter a valid 10-digit mobile number.',
+      });
       setErrorMsg('Please enter a valid 10-digit mobile number.');
       return;
     }
@@ -67,11 +77,22 @@ export const AuthScreen: React.FC = () => {
       const res = await sendOtp(formattedPhone, 'phone', 'signup');
       setIsOtpSent(true);
       setCountdown(60);
-      if (res.debugOtp) {
+      if (res?.debugOtp) {
         setDebugOtp(res.debugOtp);
       }
+      Toast.show({
+        type: 'success',
+        text1: 'OTP Sent',
+        text2: 'A 6-digit verification code has been dispatched.',
+      });
     } catch (err: any) {
-      setErrorMsg(err.response?.data?.message || 'Failed to send OTP. Please try again.');
+      const msg = err.response?.data?.message || 'Failed to send OTP. Please try again.';
+      setErrorMsg(msg);
+      Toast.show({
+        type: 'error',
+        text1: 'OTP Delivery Failed',
+        text2: msg,
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -79,6 +100,11 @@ export const AuthScreen: React.FC = () => {
 
   const handleVerifyOtp = async () => {
     if (!otpCode || otpCode.length !== 6) {
+      Toast.show({
+        type: 'error',
+        text1: 'Invalid Code',
+        text2: 'Please enter the complete 6-digit OTP.',
+      });
       setErrorMsg('Please enter the complete 6-digit OTP.');
       return;
     }
@@ -87,8 +113,19 @@ export const AuthScreen: React.FC = () => {
     try {
       const formattedPhone = phone.startsWith('+') ? phone : `+91${phone.replace(/[^0-9]/g, '').slice(-10)}`;
       await verifyOtp(formattedPhone, otpCode, 'phone', 'signup');
+      Toast.show({
+        type: 'success',
+        text1: 'Login Successful',
+        text2: 'Welcome to TredBook Super-App.',
+      });
     } catch (err: any) {
-      setErrorMsg(err.response?.data?.message || 'Invalid or expired OTP.');
+      const msg = err.response?.data?.message || 'Invalid or expired OTP.';
+      setErrorMsg(msg);
+      Toast.show({
+        type: 'error',
+        text1: 'Verification Failed',
+        text2: msg,
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -96,6 +133,11 @@ export const AuthScreen: React.FC = () => {
 
   const handlePasswordLogin = async () => {
     if (!loginInput || !password) {
+      Toast.show({
+        type: 'error',
+        text1: 'Missing Credentials',
+        text2: 'Please provide your email/phone and password.',
+      });
       setErrorMsg('Please provide your email/phone and password.');
       return;
     }
@@ -103,8 +145,19 @@ export const AuthScreen: React.FC = () => {
     setIsSubmitting(true);
     try {
       await loginPassword(loginInput, password);
+      Toast.show({
+        type: 'success',
+        text1: 'Welcome Back',
+        text2: 'Signed in successfully.',
+      });
     } catch (err: any) {
-      setErrorMsg(err.response?.data?.message || 'Invalid login credentials.');
+      const msg = err.response?.data?.message || 'Invalid login credentials.';
+      setErrorMsg(msg);
+      Toast.show({
+        type: 'error',
+        text1: 'Sign In Failed',
+        text2: msg,
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -112,18 +165,22 @@ export const AuthScreen: React.FC = () => {
 
   const handleRegister = async () => {
     if (!regName || regName.length < 3) {
+      Toast.show({ type: 'error', text1: 'Validation Error', text2: 'Name must be at least 3 characters.' });
       setErrorMsg('Name must be at least 3 characters.');
       return;
     }
     if (!regEmail || !regEmail.includes('@')) {
+      Toast.show({ type: 'error', text1: 'Validation Error', text2: 'Please enter a valid email address.' });
       setErrorMsg('Please enter a valid email address.');
       return;
     }
     if (!regPassword || regPassword.length < 6) {
+      Toast.show({ type: 'error', text1: 'Validation Error', text2: 'Password must be at least 6 characters.' });
       setErrorMsg('Password must be at least 6 characters.');
       return;
     }
     if (!termsAccepted) {
+      Toast.show({ type: 'error', text1: 'Terms Required', text2: 'Please accept Terms & Privacy Policy.' });
       setErrorMsg('Please accept the Terms & Conditions and Privacy Policy.');
       return;
     }
@@ -138,8 +195,19 @@ export const AuthScreen: React.FC = () => {
         phone: regPhone ? (regPhone.startsWith('+') ? regPhone : `+91${regPhone.slice(-10)}`) : undefined,
         terms: true,
       });
+      Toast.show({
+        type: 'success',
+        text1: 'Account Created',
+        text2: 'Your Customer ID has been generated.',
+      });
     } catch (err: any) {
-      setErrorMsg(err.response?.data?.message || 'Registration failed. Please try again.');
+      const msg = err.response?.data?.message || 'Registration failed. Please try again.';
+      setErrorMsg(msg);
+      Toast.show({
+        type: 'error',
+        text1: 'Registration Failed',
+        text2: msg,
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -148,15 +216,20 @@ export const AuthScreen: React.FC = () => {
   const handleBiometricAuth = async () => {
     const success = await authenticateBiometric();
     if (!success) {
-      Alert.alert('Biometric Login', 'Could not verify biometric credentials. Please sign in with OTP or password.');
+      Toast.show({
+        type: 'info',
+        text1: 'Biometrics Cancelled',
+        text2: 'Please sign in with password or OTP.',
+      });
     }
   };
 
   const handleGoogleLogin = () => {
-    Alert.alert(
-      'Google Sign-In',
-      'Native Google OAuth uses @react-native-google-signin/google-signin in production EAS builds. To test right now, use Mobile OTP, Registration, or Password.',
-    );
+    Toast.show({
+      type: 'info',
+      text1: 'Google Sign-In',
+      text2: 'Use Mobile OTP, Registration, or Password for local dev testing.',
+    });
   };
 
   return (
@@ -164,7 +237,19 @@ export const AuthScreen: React.FC = () => {
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
+      <ScrollView
+        contentContainerStyle={[
+          styles.scrollContent,
+          {
+            paddingTop:
+              Math.max(
+                insets.top,
+                Platform.OS === 'android' ? StatusBarNative.currentHeight || 0 : 0,
+              ) + 20,
+          },
+        ]}
+        keyboardShouldPersistTaps="handled"
+      >
         {/* Brand Header */}
         <View style={styles.brandHeader}>
           <Text style={styles.brandLogo}>TredBook</Text>
@@ -316,6 +401,13 @@ export const AuthScreen: React.FC = () => {
             />
 
             <TouchableOpacity
+              style={styles.forgotBtn}
+              onPress={() => setIsForgotModalVisible(true)}
+            >
+              <Text style={styles.forgotBtnText}>Forgot Password?</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
               style={[styles.primaryButton, { marginTop: 20 }]}
               onPress={handlePasswordLogin}
               disabled={isSubmitting}
@@ -423,6 +515,13 @@ export const AuthScreen: React.FC = () => {
           Unified TredBook Account: One login for Shopper, Merchant & Accounting.
         </Text>
       </ScrollView>
+
+      {/* Forgot Password Modal */}
+      <ForgotPasswordModal
+        visible={isForgotModalVisible}
+        onClose={() => setIsForgotModalVisible(false)}
+        onSuccess={() => setIsForgotModalVisible(false)}
+      />
     </KeyboardAvoidingView>
   );
 };
@@ -580,6 +679,16 @@ const styles = StyleSheet.create({
     color: '#1E40AF',
     fontSize: 13,
     fontWeight: '700',
+  },
+  forgotBtn: {
+    alignSelf: 'flex-end',
+    marginTop: 8,
+    paddingVertical: 4,
+  },
+  forgotBtnText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#1E3A8A',
   },
   checkboxRow: {
     flexDirection: 'row',

@@ -3,21 +3,37 @@ import {
   StyleSheet,
   Text,
   View,
-  SafeAreaView,
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
+  Platform,
+  StatusBar as StatusBarNative,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
+import Toast from 'react-native-toast-message';
 import { AuthProvider, useAuth } from './src/context/AuthContext';
 import { AuthScreen } from './src/screens/AuthScreen';
 import { ProfileScreen } from './src/screens/ProfileScreen';
 import { SocialScreen } from './src/screens/SocialScreen';
+import { BiometricPromptModal } from './src/components/BiometricPromptModal';
 
 type NavigationTab = 'home' | 'social' | 'marketplace' | 'business' | 'profile';
 
 const MainAppContent: React.FC = () => {
-  const { user, companies, activeCompanyId, isAuthenticated, isLoading } = useAuth();
+  const {
+    user,
+    companies,
+    activeCompanyId,
+    isAuthenticated,
+    isLoading,
+    isBiometricSupported,
+    isBiometricEnabled,
+    hasDismissedBiometricPrompt,
+    dismissBiometricPrompt,
+    enableBiometricsPostLogin,
+  } = useAuth();
+  const insets = useSafeAreaInsets();
   const [activeTab, setActiveTab] = useState<NavigationTab>('home');
 
   if (isLoading) {
@@ -38,12 +54,17 @@ const MainAppContent: React.FC = () => {
     ...companies.shared,
   ].find((c) => c.id === activeCompanyId);
 
+  const topInset = Math.max(
+    insets.top,
+    Platform.OS === 'android' ? (StatusBarNative.currentHeight || 0) : 0,
+  );
+
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <View style={styles.safeArea}>
       <StatusBar style="dark" />
 
-      {/* Top Header Bar */}
-      <View style={styles.header}>
+      {/* Top Header Bar with Safe Area Notch Margin */}
+      <View style={[styles.header, { paddingTop: topInset + 8 }]}>
         <View>
           <Text style={styles.headerTitle}>TredBook Super-App</Text>
           <Text style={styles.headerSubtitle}>
@@ -62,6 +83,13 @@ const MainAppContent: React.FC = () => {
           )}
         </View>
       </View>
+
+      {/* Post-Login Biometrics Prompt Modal */}
+      <BiometricPromptModal
+        visible={isBiometricSupported && !isBiometricEnabled && !hasDismissedBiometricPrompt}
+        onEnable={enableBiometricsPostLogin}
+        onDismiss={dismissBiometricPrompt}
+      />
 
       {/* Main Workspace */}
       {activeTab === 'profile' ? (
@@ -177,15 +205,18 @@ const MainAppContent: React.FC = () => {
           <Text style={[styles.tabText, activeTab === 'profile' && styles.tabTextActive]}>Profile</Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
 export default function App() {
   return (
-    <AuthProvider>
-      <MainAppContent />
-    </AuthProvider>
+    <SafeAreaProvider>
+      <AuthProvider>
+        <MainAppContent />
+        <Toast />
+      </AuthProvider>
+    </SafeAreaProvider>
   );
 }
 

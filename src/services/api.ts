@@ -45,9 +45,28 @@ api.interceptors.request.use(async (config) => {
   return config;
 });
 
-// Response Interceptor: Silent Refresh on 401
+// Response Interceptor: Transparent Unwrapper & Silent Refresh on 401
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    // Transparently unwrap production envelope { success: true, statusCode, message, data }
+    if (
+      response.data &&
+      typeof response.data === 'object' &&
+      response.data.success === true &&
+      response.data.data !== undefined
+    ) {
+      const envelopeMessage = response.data.message;
+      if (Array.isArray(response.data.data)) {
+        response.data = response.data.data;
+      } else if (typeof response.data.data === 'object' && response.data.data !== null) {
+        response.data = {
+          ...response.data.data,
+          message: response.data.data.message || envelopeMessage,
+        };
+      }
+    }
+    return response;
+  },
   async (error) => {
     const originalRequest = error.config;
     if (error.response?.status === 401 && !originalRequest._retry) {
