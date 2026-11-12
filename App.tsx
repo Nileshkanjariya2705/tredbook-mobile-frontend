@@ -12,6 +12,7 @@ import { StatusBar } from 'expo-status-bar';
 import { AuthProvider, useAuth } from './src/context/AuthContext';
 import { AuthScreen } from './src/screens/AuthScreen';
 import { ProfileScreen } from './src/screens/ProfileScreen';
+import { SocialScreen } from './src/screens/SocialScreen';
 
 type NavigationTab = 'home' | 'social' | 'marketplace' | 'business' | 'profile';
 
@@ -65,6 +66,8 @@ const MainAppContent: React.FC = () => {
       {/* Main Workspace */}
       {activeTab === 'profile' ? (
         <ProfileScreen />
+      ) : activeTab === 'social' ? (
+        <SocialScreen />
       ) : (
         <ScrollView contentContainerStyle={styles.contentContainer}>
           {/* Tab 1: Home Dashboard (PRD Section 6.1) */}
@@ -84,24 +87,6 @@ const MainAppContent: React.FC = () => {
                 <Text style={styles.tag}>PRD Section 6.1</Text>
                 <Text style={styles.tag}>Purchase Book Vault</Text>
                 <Text style={styles.tag}>Order Tracking</Text>
-              </View>
-            </View>
-          )}
-
-          {/* Tab 2: Social Ecosystem (PRD Section 7 & FN-CHAT) */}
-          {activeTab === 'social' && (
-            <View style={styles.card}>
-              <Text style={styles.cardEmoji}>💬</Text>
-              <Text style={styles.cardTitle}>Social & Real-Time Communication</Text>
-              <Text style={styles.cardDesc}>
-                Real-time 1-on-1 & 1,000-member community rooms, interactive invoice payment
-                cards, quotation cards, 24h stories with product tags, and broadcast channels.
-              </Text>
-              <View style={styles.tagRow}>
-                <Text style={styles.tag}>FN-CHAT-01 to 18</Text>
-                <Text style={styles.tag}>Interactive UPI Cards</Text>
-                <Text style={styles.tag}>24h Stories</Text>
-                <Text style={styles.tag}>Broadcast Channels</Text>
               </View>
             </View>
           )}
