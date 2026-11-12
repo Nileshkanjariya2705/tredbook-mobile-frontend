@@ -75,12 +75,15 @@ api.interceptors.response.use(
       if (refreshToken) {
         try {
           const res = await axios.post(`${API_BASE_URL}/auth/refresh`, { refreshToken });
-          if (res.data?.accessToken) {
-            await tokenStorage.set('access_token', res.data.accessToken);
-            if (res.data.refreshToken) {
-              await tokenStorage.set('refresh_token', res.data.refreshToken);
+          const access = res.data?.accessToken || res.data?.data?.accessToken;
+          const refresh = res.data?.refreshToken || res.data?.data?.refreshToken;
+          if (access) {
+            await tokenStorage.set('access_token', access);
+            if (refresh) {
+              await tokenStorage.set('refresh_token', refresh);
+              await tokenStorage.set('biometric_refresh_token', refresh);
             }
-            originalRequest.headers.Authorization = `Bearer ${res.data.accessToken}`;
+            originalRequest.headers.Authorization = `Bearer ${access}`;
             return api(originalRequest);
           }
         } catch {

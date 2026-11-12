@@ -43,7 +43,7 @@ interface AuthContextType {
   verifyOtp: (destination: string, code: string, channel: 'email' | 'phone', purpose?: string, fullName?: string) => Promise<any>;
   loginPassword: (login: string, password: string) => Promise<any>;
   register: (payload: RegisterPayload) => Promise<any>;
-  authenticateBiometric: () => Promise<boolean>;
+  authenticateBiometric: () => Promise<{ success: boolean; message?: string }>;
   toggleBiometrics: (enabled: boolean) => Promise<void>;
   hasDismissedBiometricPrompt: boolean;
   dismissBiometricPrompt: () => Promise<void>;
@@ -94,8 +94,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // Check biometric hardware support
       try {
         const compatible = await LocalAuthentication.hasHardwareAsync();
-        const enrolled = await LocalAuthentication.isEnrolledAsync();
-        setIsBiometricSupported(compatible && enrolled);
+        setIsBiometricSupported(compatible);
 
         const bioSetting = await tokenStorage.get('biometrics_enabled');
         setIsBiometricEnabled(bioSetting === 'true');
@@ -109,34 +108,120 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const token = await tokenStorage.get('access_token');
       if (token) {
         await refreshProfile();
+        const rToken = await tokenStorage.get('refresh_token');
+        const bToken = await tokenStorage.get('biometric_refresh_token');
+        if (rToken && !bToken) {
+          await tokenStorage.set('biometric_refresh_token', rToken);
+        }
       }
       setIsLoading(false);
     };
     initAuth();
   }, []);
 
-  const authenticateBiometric = async (): Promise<boolean> => {
+  const authenticateBiometric = async (): Promise<{ success: boolean; message?: string }> => {
     try {
+      // 1. Check hardware support
+      const hasHardware = await LocalAuthentication.hasHardwareAsync();
+      if (!hasHardware) {
+        return {
+          success: false,
+          message: 'Biometrics hardware not available on this device.',
+        };
+      }
+      const isEnrolled = await LocalAuthentication.isEnrolledAsync();
+      if (!isEnrolled) {
+        return {
+          success: false,
+          message: 'No biometrics (fingerprint/face) enrolled in device settings.',
+        };
+      }
+
+      // 2. Retrieve hardware-secured biometric refresh token
+      let bioRefreshToken = await tokenStorage.get('biometric_refresh_token');
+      if (!bioRefreshToken) {
+        bioRefreshToken = await tokenStorage.get('refresh_token');
+      }
+
+      if (!bioRefreshToken) {
+        return {
+          success: false,
+          message: 'No biometric credentials saved. Please sign in with Password or OTP first.',
+        };
+      }
+
+      // 3. Prompt user for native biometric scan
       const res = await LocalAuthentication.authenticateAsync({
         promptMessage: 'Unlock TredBook with Biometrics',
         fallbackLabel: 'Use Password or OTP',
+        cancelLabel: 'Cancel',
+        disableDeviceFallback: false,
       });
-      if (res.success) {
-        const token = await tokenStorage.get('access_token');
-        if (token) {
-          await refreshProfile();
-          return true;
+
+      if (!res.success) {
+        let msg = 'Biometric verification cancelled.';
+        if (res.error === 'lockout') {
+          msg = 'Too many attempts. Biometrics temporarily locked.';
+        } else if (res.error === 'not_enrolled') {
+          msg = 'No biometrics enrolled in device security settings.';
+        } else if (res.error === 'user_cancel') {
+          msg = 'Biometric prompt cancelled.';
+        } else if (res.error) {
+          msg = `Biometric scan failed: ${res.error}`;
         }
+        return {
+          success: false,
+          message: msg,
+        };
       }
-      return false;
-    } catch {
-      return false;
+
+      // 4. Exchange biometric refresh token with backend for fresh JWT access token
+      try {
+        const refreshRes = await api.post('/auth/refresh', { refreshToken: bioRefreshToken });
+        if (refreshRes.data?.accessToken) {
+          await tokenStorage.set('access_token', refreshRes.data.accessToken);
+          if (refreshRes.data.refreshToken) {
+            await tokenStorage.set('refresh_token', refreshRes.data.refreshToken);
+            await tokenStorage.set('biometric_refresh_token', refreshRes.data.refreshToken);
+          }
+          setIsBiometricEnabled(true);
+          await tokenStorage.set('biometrics_enabled', 'true');
+          await refreshProfile();
+          return { success: true };
+        }
+      } catch (refreshErr: any) {
+        if (refreshErr.response?.status === 401) {
+          await tokenStorage.remove('biometric_refresh_token');
+          return {
+            success: false,
+            message: 'Biometric session expired. Please sign in with Password or OTP once to renew.',
+          };
+        }
+        throw refreshErr;
+      }
+
+      return {
+        success: false,
+        message: 'Could not refresh session. Please sign in with password.',
+      };
+    } catch (err: any) {
+      const errorMsg =
+        err.response?.data?.message || err.message || 'Biometric authentication failed.';
+      return { success: false, message: errorMsg };
     }
   };
 
   const toggleBiometrics = async (enabled: boolean) => {
     setIsBiometricEnabled(enabled);
     await tokenStorage.set('biometrics_enabled', enabled ? 'true' : 'false');
+    if (enabled) {
+      const currentRefresh = await tokenStorage.get('refresh_token');
+      if (currentRefresh) {
+        await tokenStorage.set('biometric_refresh_token', currentRefresh);
+      }
+    } else {
+      await tokenStorage.remove('biometric_refresh_token');
+    }
   };
 
   const dismissBiometricPrompt = async () => {
@@ -155,6 +240,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         await tokenStorage.set('biometrics_enabled', 'true');
         setHasDismissedBiometricPrompt(true);
         await tokenStorage.set('biometric_prompt_dismissed', 'true');
+
+        const currentRefresh = await tokenStorage.get('refresh_token');
+        if (currentRefresh) {
+          await tokenStorage.set('biometric_refresh_token', currentRefresh);
+        }
         return true;
       }
       return false;
@@ -184,6 +274,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       await tokenStorage.set('access_token', res.data.accessToken);
       if (res.data.refreshToken) {
         await tokenStorage.set('refresh_token', res.data.refreshToken);
+        await tokenStorage.set('biometric_refresh_token', res.data.refreshToken);
       }
       await refreshProfile();
     }
@@ -201,6 +292,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       await tokenStorage.set('access_token', res.data.accessToken);
       if (res.data.refreshToken) {
         await tokenStorage.set('refresh_token', res.data.refreshToken);
+        await tokenStorage.set('biometric_refresh_token', res.data.refreshToken);
       }
       await refreshProfile();
     }
@@ -213,6 +305,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       await tokenStorage.set('access_token', res.data.accessToken);
       if (res.data.refreshToken) {
         await tokenStorage.set('refresh_token', res.data.refreshToken);
+        await tokenStorage.set('biometric_refresh_token', res.data.refreshToken);
       }
       await refreshProfile();
     }
@@ -225,6 +318,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       await tokenStorage.set('access_token', res.data.accessToken);
       if (res.data.refreshToken) {
         await tokenStorage.set('refresh_token', res.data.refreshToken);
+        await tokenStorage.set('biometric_refresh_token', res.data.refreshToken);
       }
       await refreshProfile();
     }

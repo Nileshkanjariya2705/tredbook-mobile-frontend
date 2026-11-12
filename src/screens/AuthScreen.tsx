@@ -214,13 +214,30 @@ export const AuthScreen: React.FC = () => {
   };
 
   const handleBiometricAuth = async () => {
-    const success = await authenticateBiometric();
-    if (!success) {
+    setIsSubmitting(true);
+    try {
+      const res = await authenticateBiometric();
+      if (res.success) {
+        Toast.show({
+          type: 'success',
+          text1: 'Biometrics Verified',
+          text2: 'Signed in successfully.',
+        });
+      } else {
+        Toast.show({
+          type: 'info',
+          text1: 'Biometric Login',
+          text2: res.message || 'Verification cancelled or failed.',
+        });
+      }
+    } catch (err: any) {
       Toast.show({
-        type: 'info',
-        text1: 'Biometrics Cancelled',
-        text2: 'Please sign in with password or OTP.',
+        type: 'error',
+        text1: 'Biometric Error',
+        text2: err?.message || 'Biometric authentication encountered an error.',
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -337,6 +354,16 @@ export const AuthScreen: React.FC = () => {
                     <Text style={styles.primaryButtonText}>Get 6-Digit OTP</Text>
                   )}
                 </TouchableOpacity>
+
+                {isBiometricSupported && (
+                  <TouchableOpacity
+                    style={styles.biometricButton}
+                    onPress={handleBiometricAuth}
+                    disabled={isSubmitting}
+                  >
+                    <Text style={styles.biometricButtonText}>🔐 Sign In with Fingerprint / FaceID</Text>
+                  </TouchableOpacity>
+                )}
               </>
             ) : (
               <>
@@ -424,6 +451,7 @@ export const AuthScreen: React.FC = () => {
               <TouchableOpacity
                 style={styles.biometricButton}
                 onPress={handleBiometricAuth}
+                disabled={isSubmitting}
               >
                 <Text style={styles.biometricButtonText}>🔐 Sign In with Fingerprint / FaceID</Text>
               </TouchableOpacity>
