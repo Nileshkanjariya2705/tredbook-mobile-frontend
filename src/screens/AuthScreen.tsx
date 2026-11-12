@@ -320,6 +320,14 @@ export const AuthScreen: React.FC = () => {
     }
   }, [googleResponse]);
 
+  // Pre-warm in-app Custom Tabs browser for instant, seamless in-app popup
+  useEffect(() => {
+    WebBrowser.warmUpAsync();
+    return () => {
+      WebBrowser.coolDownAsync();
+    };
+  }, []);
+
   const handleGoogleLogin = async () => {
     try {
       if (!googleRequest) {
@@ -329,7 +337,12 @@ export const AuthScreen: React.FC = () => {
           text2: 'Preparing Google authorization session...',
         });
       }
-      const result = await promptGoogleAsync();
+      // Force in-app overlay window (Custom Tab) without switching tasks to external Chrome
+      const result = await promptGoogleAsync({
+        createTask: false,
+        showInRecents: false,
+        toolbarColor: Palette.surface,
+      });
       if (result.type === 'success' && result.params?.id_token) {
         await handleGoogleTokenSubmit(result.params.id_token);
       }
