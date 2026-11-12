@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import * as LocalAuthentication from 'expo-local-authentication';
 import { api, tokenStorage } from '../services/api';
 
 export interface UserProfile {
@@ -21,6 +22,14 @@ export interface CompanySummary {
   isOwner: boolean;
 }
 
+export interface RegisterPayload {
+  name: string;
+  email: string;
+  password: string;
+  phone?: string;
+  terms?: boolean;
+}
+
 interface AuthContextType {
   user: UserProfile | null;
   companies: { owned: CompanySummary[]; shared: CompanySummary[] };
@@ -28,9 +37,14 @@ interface AuthContextType {
   setActiveCompanyId: (id: string) => void;
   isLoading: boolean;
   isAuthenticated: boolean;
+  isBiometricSupported: boolean;
+  isBiometricEnabled: boolean;
   sendOtp: (destination: string, channel: 'email' | 'phone', purpose?: string) => Promise<any>;
   verifyOtp: (destination: string, code: string, channel: 'email' | 'phone', purpose?: string, fullName?: string) => Promise<any>;
   loginPassword: (login: string, password: string) => Promise<any>;
+  register: (payload: RegisterPayload) => Promise<any>;
+  authenticateBiometric: () => Promise<boolean>;
+  toggleBiometrics: (enabled: boolean) => Promise<void>;
   logout: () => Promise<void>;
   refreshProfile: () => Promise<void>;
 }
@@ -45,6 +59,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   });
   const [activeCompanyId, setActiveCompanyId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isBiometricSupported, setIsBiometricSupported] = useState<boolean>(false);
+  const [isBiometricEnabled, setIsBiometricEnabled] = useState<boolean>(false);
 
   const refreshProfile = async () => {
     try {
@@ -68,6 +84,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const initAuth = async () => {
       setIsLoading(true);
+
+      // Check biometric hardware support
+      try {
+        const compatible = await LocalAuthentication.hasHardwareAsync();
+        const enrolled = await LocalAuthentication.isEnrolledAsync();
+        setIsBiometricSupported(compatible && enrolled);
+
+        const bioSetting = await tokenStorage.get('biometrics_enabled');
+        setIsBiometricEnabled(bioSetting === 'true');
+      } catch {
+        setIsBiometricSupported(false);
+      }
+
       const token = await tokenStorage.get('access_token');
       if (token) {
         await refreshProfile();
@@ -76,6 +105,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
     initAuth();
   }, []);
+
+  const authenticateBiometric = async (): Promise<boolean> => {
+    try {
+      const res = await LocalAuthentication.authenticateAsync({
+        promptMessage: 'Unlock TredBook with Biometrics',
+        fallbackLabel: 'Use Password or OTP',
+      });
+      if (res.success) {
+        const token = await tokenStorage.get('access_token');
+        if (token) {
+          await refreshProfile();
+          return true;
+        }
+      }
+      return false;
+    } catch {
+      return false;
+    }
+  };
+
+  const toggleBiometrics = async (enabled: boolean) => {
+    setIsBiometricEnabled(enabled);
+    await tokenStorage.set('biometrics_enabled', enabled ? 'true' : 'false');
+  };
 
   const sendOtp = async (destination: string, channel: 'email' | 'phone', purpose: string = 'login') => {
     const res = await api.post('/auth/send-otp', { destination, channel, purpose });
@@ -106,6 +159,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return res.data;
   };
 
+  const register = async (payload: RegisterPayload) => {
+    const res = await api.post('/auth/register', payload);
+    if (res.data?.accessToken) {
+      await tokenStorage.set('access_token', res.data.accessToken);
+      if (res.data.refreshToken) {
+        await tokenStorage.set('refresh_token', res.data.refreshToken);
+      }
+      await refreshProfile();
+    }
+    return res.data;
+  };
+
   const logout = async () => {
     await tokenStorage.remove('access_token');
     await tokenStorage.remove('refresh_token');
@@ -123,9 +188,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setActiveCompanyId,
         isLoading,
         isAuthenticated: !!user,
+        isBiometricSupported,
+        isBiometricEnabled,
         sendOtp,
         verifyOtp,
         loginPassword,
+        register,
+        authenticateBiometric,
+        toggleBiometrics,
         logout,
         refreshProfile,
       }}
