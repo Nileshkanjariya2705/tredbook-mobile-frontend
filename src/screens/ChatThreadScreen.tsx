@@ -15,6 +15,7 @@ import { api } from '../services/api';
 import { getSocket } from '../services/socket';
 import { TransactionCard } from '../components/TransactionCard';
 import { useAuth } from '../context/AuthContext';
+import { Palette, SoftShadow } from '../theme/colors';
 
 interface MessageItem {
   id: string;
@@ -221,23 +222,23 @@ export const ChatThreadScreen: React.FC<ChatThreadScreenProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: Palette.background,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: Palette.surface,
     borderBottomWidth: 1,
-    borderBottomColor: '#E2E8F0',
+    borderBottomColor: Palette.border,
   },
   backButton: {
     paddingRight: 14,
   },
   backButtonText: {
     fontSize: 22,
-    color: '#0284C7',
+    color: Palette.textPrimary,
     fontWeight: '700',
   },
   headerInfo: {
@@ -245,13 +246,14 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 16,
-    fontWeight: '700',
-    color: '#0F172A',
+    fontWeight: '800',
+    color: Palette.textPrimary,
+    letterSpacing: -0.3,
   },
   headerStatus: {
     fontSize: 11,
-    color: '#0284C7',
-    fontWeight: '600',
+    color: Palette.mintDark,
+    fontWeight: '700',
   },
   loadingBox: {
     flex: 1,
@@ -261,7 +263,7 @@ const styles = StyleSheet.create({
   messageList: {
     padding: 16,
     paddingBottom: 24,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: Palette.background,
   },
   bubbleWrapper: {
     marginBottom: 12,
@@ -275,70 +277,64 @@ const styles = StyleSheet.create({
   },
   senderLabel: {
     fontSize: 11,
-    color: '#64748B',
+    color: Palette.textSecondary,
     marginBottom: 3,
     marginLeft: 6,
     fontWeight: '600',
   },
   bubble: {
-    borderRadius: 16,
-    padding: 12,
+    borderRadius: 18,
+    padding: 13,
   },
   myBubble: {
-    backgroundColor: '#0284C7',
+    backgroundColor: Palette.primary,
     borderBottomRightRadius: 4,
-    shadowColor: '#0284C7',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 2,
   },
   peerBubble: {
-    backgroundColor: '#F8FAFC',
+    backgroundColor: Palette.surface,
     borderBottomLeftRadius: 4,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: Palette.border,
+    ...SoftShadow.card,
   },
   messageText: {
     fontSize: 14,
-    color: '#0F172A',
+    color: Palette.textPrimary,
     lineHeight: 20,
   },
   myMessageText: {
-    color: '#FFFFFF',
+    color: Palette.primaryText,
   },
   timestamp: {
     fontSize: 10,
-    color: '#94A3B8',
+    color: Palette.textSecondary,
     marginTop: 4,
     alignSelf: 'flex-end',
   },
   myTimestamp: {
-    color: '#E0F2FE',
+    color: Palette.mintLight,
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 10,
     paddingHorizontal: 14,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: Palette.surface,
     borderTopWidth: 1,
-    borderTopColor: '#E2E8F0',
+    borderTopColor: Palette.border,
   },
   attachButton: {
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: '#F0F9FF',
-    borderWidth: 1,
-    borderColor: '#BAE6FD',
+    backgroundColor: Palette.lilac,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 8,
   },
   attachIcon: {
     fontSize: 22,
-    color: '#0284C7',
+    color: Palette.lilacDark,
     fontWeight: '700',
     marginTop: -2,
   },
@@ -346,33 +342,28 @@ const styles = StyleSheet.create({
     flex: 1,
     minHeight: 40,
     maxHeight: 100,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: Palette.background,
     borderWidth: 1,
-    borderColor: '#CBD5E1',
+    borderColor: Palette.border,
     borderRadius: 20,
     paddingHorizontal: 14,
     paddingTop: 10,
     paddingBottom: 10,
     fontSize: 14,
-    color: '#0F172A',
+    color: Palette.textPrimary,
   },
   sendButton: {
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: '#0284C7',
+    backgroundColor: Palette.primary,
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: 8,
-    shadowColor: '#0284C7',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 2,
   },
   sendButtonText: {
     fontSize: 16,
-    color: '#FFFFFF',
+    color: Palette.primaryText,
     fontWeight: '700',
   },
 });

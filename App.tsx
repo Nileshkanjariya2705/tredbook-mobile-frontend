@@ -19,15 +19,16 @@ import { AuthScreen } from './src/screens/AuthScreen';
 import { ProfileScreen } from './src/screens/ProfileScreen';
 import { SocialScreen } from './src/screens/SocialScreen';
 import { BiometricPromptModal } from './src/components/BiometricPromptModal';
+import { Palette, SoftShadow } from './src/theme/colors';
 
 const theme = {
   ...MD3LightTheme,
   colors: {
     ...MD3LightTheme.colors,
-    primary: '#0284C7',
-    secondary: '#0EA5E9',
-    background: '#FFFFFF',
-    surface: '#FFFFFF',
+    primary: Palette.primary,
+    secondary: Palette.mint,
+    background: Palette.background,
+    surface: Palette.surface,
   },
 };
 
@@ -52,7 +53,7 @@ const MainAppContent: React.FC = () => {
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#0284C7" />
+        <ActivityIndicator size="large" color={Palette.primary} />
         <Text style={styles.loadingText}>Initializing TredBook...</Text>
       </View>
     );
@@ -182,7 +183,7 @@ const MainAppContent: React.FC = () => {
           style={[styles.tabButton, activeTab === 'home' && styles.tabButtonActive]}
           onPress={() => setActiveTab('home')}
         >
-          <Home size={20} color={activeTab === 'home' ? '#0284C7' : '#64748B'} strokeWidth={activeTab === 'home' ? 2.5 : 1.8} />
+          <Home size={20} color={activeTab === 'home' ? Palette.primary : Palette.textSecondary} strokeWidth={activeTab === 'home' ? 2.5 : 1.8} />
           <Text style={[styles.tabText, activeTab === 'home' && styles.tabTextActive]}>Home</Text>
         </TouchableOpacity>
 
@@ -190,7 +191,7 @@ const MainAppContent: React.FC = () => {
           style={[styles.tabButton, activeTab === 'social' && styles.tabButtonActive]}
           onPress={() => setActiveTab('social')}
         >
-          <MessageSquare size={20} color={activeTab === 'social' ? '#0284C7' : '#64748B'} strokeWidth={activeTab === 'social' ? 2.5 : 1.8} />
+          <MessageSquare size={20} color={activeTab === 'social' ? Palette.primary : Palette.textSecondary} strokeWidth={activeTab === 'social' ? 2.5 : 1.8} />
           <Text style={[styles.tabText, activeTab === 'social' && styles.tabTextActive]}>Social</Text>
         </TouchableOpacity>
 
@@ -198,7 +199,7 @@ const MainAppContent: React.FC = () => {
           style={[styles.tabButton, activeTab === 'marketplace' && styles.tabButtonActive]}
           onPress={() => setActiveTab('marketplace')}
         >
-          <Store size={20} color={activeTab === 'marketplace' ? '#0284C7' : '#64748B'} strokeWidth={activeTab === 'marketplace' ? 2.5 : 1.8} />
+          <Store size={20} color={activeTab === 'marketplace' ? Palette.primary : Palette.textSecondary} strokeWidth={activeTab === 'marketplace' ? 2.5 : 1.8} />
           <Text style={[styles.tabText, activeTab === 'marketplace' && styles.tabTextActive]}>Market</Text>
         </TouchableOpacity>
 
@@ -206,7 +207,7 @@ const MainAppContent: React.FC = () => {
           style={[styles.tabButton, activeTab === 'business' && styles.tabButtonActive]}
           onPress={() => setActiveTab('business')}
         >
-          <BarChart3 size={20} color={activeTab === 'business' ? '#0284C7' : '#64748B'} strokeWidth={activeTab === 'business' ? 2.5 : 1.8} />
+          <BarChart3 size={20} color={activeTab === 'business' ? Palette.primary : Palette.textSecondary} strokeWidth={activeTab === 'business' ? 2.5 : 1.8} />
           <Text style={[styles.tabText, activeTab === 'business' && styles.tabTextActive]}>Business</Text>
         </TouchableOpacity>
 
@@ -214,7 +215,7 @@ const MainAppContent: React.FC = () => {
           style={[styles.tabButton, activeTab === 'profile' && styles.tabButtonActive]}
           onPress={() => setActiveTab('profile')}
         >
-          <User size={20} color={activeTab === 'profile' ? '#0284C7' : '#64748B'} strokeWidth={activeTab === 'profile' ? 2.5 : 1.8} />
+          <User size={20} color={activeTab === 'profile' ? Palette.primary : Palette.textSecondary} strokeWidth={activeTab === 'profile' ? 2.5 : 1.8} />
           <Text style={[styles.tabText, activeTab === 'profile' && styles.tabTextActive]}>Profile</Text>
         </TouchableOpacity>
       </View>
@@ -238,18 +239,18 @@ export default function App() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: Palette.background,
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F8FAFC',
+    backgroundColor: Palette.background,
   },
   loadingText: {
     marginTop: 12,
     fontSize: 14,
-    color: '#64748B',
+    color: Palette.textSecondary,
     fontWeight: '600',
   },
   header: {
@@ -258,40 +259,39 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: Palette.surface,
     borderBottomWidth: 1,
-    borderBottomColor: '#E2E8F0',
+    borderBottomColor: Palette.border,
   },
   headerTitle: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#0F172A',
+    color: Palette.textPrimary,
+    letterSpacing: -0.3,
   },
   headerSubtitle: {
     fontSize: 12,
-    color: '#64748B',
+    color: Palette.textSecondary,
     marginTop: 2,
-    fontWeight: '600',
+    fontWeight: '500',
   },
   badgeRow: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   onlineBadge: {
-    backgroundColor: '#DCFCE7',
-    paddingHorizontal: 8,
+    backgroundColor: Palette.mint,
+    paddingHorizontal: 10,
     paddingVertical: 4,
-    borderRadius: 6,
+    borderRadius: 8,
   },
   onlineBadgeText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#15803D',
+    color: Palette.mintDark,
   },
   companyBadge: {
-    backgroundColor: '#F0F9FF',
-    borderWidth: 1,
-    borderColor: '#BAE6FD',
+    backgroundColor: Palette.lilac,
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 8,
@@ -300,24 +300,21 @@ const styles = StyleSheet.create({
   companyBadgeText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#0284C7',
+    color: Palette.lilacDark,
   },
   contentContainer: {
     padding: 16,
     paddingBottom: 40,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: Palette.background,
   },
   card: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
+    backgroundColor: Palette.surface,
+    borderRadius: 20,
     padding: 20,
     marginBottom: 16,
-    borderWidth: 1.5,
-    borderColor: '#E2E8F0',
-    shadowColor: '#0284C7',
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
-    elevation: 2,
+    borderWidth: 1,
+    borderColor: Palette.border,
+    ...SoftShadow.card,
   },
   cardEmoji: {
     fontSize: 32,
@@ -325,33 +322,32 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontSize: 18,
-    fontWeight: '700',
-    color: '#0F172A',
+    fontWeight: '800',
+    color: Palette.textPrimary,
+    letterSpacing: -0.3,
     marginBottom: 6,
   },
   cardDesc: {
     fontSize: 13,
-    color: '#475569',
+    color: Palette.textSecondary,
     lineHeight: 20,
     marginBottom: 14,
   },
   metaBox: {
-    backgroundColor: '#F0F9FF',
-    borderRadius: 10,
-    padding: 12,
-    marginBottom: 12,
-    borderLeftWidth: 4,
-    borderLeftColor: '#0284C7',
+    backgroundColor: Palette.holoPink,
+    borderRadius: 14,
+    padding: 14,
+    marginBottom: 14,
   },
   metaTitle: {
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: '700',
-    color: '#0F172A',
+    color: Palette.textPrimary,
   },
   metaSub: {
-    fontSize: 11,
-    color: '#0284C7',
-    marginTop: 2,
+    fontSize: 12,
+    color: Palette.holoPinkDark,
+    marginTop: 3,
     fontWeight: '600',
   },
   tagRow: {
@@ -360,21 +356,21 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   tag: {
-    backgroundColor: '#F0F9FF',
-    color: '#0284C7',
+    backgroundColor: Palette.lilacLight,
+    color: Palette.lilacDark,
     fontSize: 11,
     fontWeight: '600',
     paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: 6,
+    borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#BAE6FD',
+    borderColor: Palette.lilac,
   },
   tabBar: {
     flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: Palette.surface,
     borderTopWidth: 1,
-    borderTopColor: '#E2E8F0',
+    borderTopColor: Palette.border,
     paddingBottom: 8,
     paddingTop: 6,
   },
@@ -385,7 +381,7 @@ const styles = StyleSheet.create({
   },
   tabButtonActive: {
     borderTopWidth: 2,
-    borderTopColor: '#0284C7',
+    borderTopColor: Palette.primary,
   },
   tabIcon: {
     fontSize: 18,
@@ -394,10 +390,10 @@ const styles = StyleSheet.create({
   tabText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#64748B',
+    color: Palette.textSecondary,
   },
   tabTextActive: {
-    color: '#0284C7',
+    color: Palette.primary,
     fontWeight: '700',
   },
 });

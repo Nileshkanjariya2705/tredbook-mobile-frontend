@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import Toast from 'react-native-toast-message';
+import { Palette, SoftShadow } from '../theme/colors';
 
 interface BiometricPromptModalProps {
   visible: boolean;
@@ -100,7 +101,7 @@ export const BiometricPromptModal: React.FC<BiometricPromptModalProps> = ({
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(15, 23, 42, 0.65)',
+    backgroundColor: 'rgba(18, 18, 20, 0.65)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 24,
@@ -108,40 +109,35 @@ const styles = StyleSheet.create({
   card: {
     width: '100%',
     maxWidth: 380,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: Palette.surface,
     borderRadius: 24,
     padding: 28,
     alignItems: 'center',
-    shadowColor: '#0F172A',
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.2,
-    shadowRadius: 20,
-    elevation: 8,
+    ...SoftShadow.modal,
   },
   iconCircle: {
     width: 68,
     height: 68,
     borderRadius: 34,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: Palette.mint,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 18,
-    borderWidth: 1,
-    borderColor: '#DBEAFE',
   },
   iconText: {
     fontSize: 32,
   },
   title: {
     fontSize: 20,
-    fontWeight: '700',
-    color: '#0F172A',
+    fontWeight: '800',
+    color: Palette.textPrimary,
+    letterSpacing: -0.4,
     marginBottom: 8,
     textAlign: 'center',
   },
   description: {
     fontSize: 14,
-    color: '#64748B',
+    color: Palette.textSecondary,
     textAlign: 'center',
     lineHeight: 21,
     marginBottom: 24,
@@ -151,18 +147,13 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   primaryButton: {
-    backgroundColor: '#0284C7',
+    backgroundColor: Palette.primary,
     paddingVertical: 14,
     borderRadius: 14,
     alignItems: 'center',
-    shadowColor: '#0284C7',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
-    shadowRadius: 8,
-    elevation: 3,
   },
   primaryButtonText: {
-    color: '#FFFFFF',
+    color: Palette.primaryText,
     fontSize: 15,
     fontWeight: '700',
   },
@@ -171,7 +162,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   secondaryButtonText: {
-    color: '#64748B',
+    color: Palette.textSecondary,
     fontSize: 14,
     fontWeight: '600',
   },

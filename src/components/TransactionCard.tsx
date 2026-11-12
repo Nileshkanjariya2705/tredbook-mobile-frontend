@@ -8,6 +8,7 @@ import {
   Alert,
 } from 'react-native';
 import { Receipt, FileText, ShieldCheck, Zap, ExternalLink, Check } from 'lucide-react-native';
+import { Palette, SoftShadow } from '../theme/colors';
 
 export interface TransactionCardProps {
   type: string;
@@ -150,16 +151,13 @@ export const TransactionCard: React.FC<TransactionCardProps> = ({ type, metadata
 
 const styles = StyleSheet.create({
   cardContainer: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 14,
+    backgroundColor: Palette.surface,
+    borderRadius: 16,
     padding: 14,
     marginVertical: 4,
     borderWidth: 1,
-    borderColor: '#CBD5E1',
-    shadowColor: '#000',
-    shadowOpacity: 0.06,
-    shadowRadius: 6,
-    elevation: 2,
+    borderColor: Palette.border,
+    ...SoftShadow.card,
     minWidth: 240,
   },
   headerRow: {
@@ -175,8 +173,8 @@ const styles = StyleSheet.create({
   },
   cardTypeTitle: {
     fontSize: 13,
-    fontWeight: '700',
-    color: '#1E3A8A',
+    fontWeight: '800',
+    color: Palette.textPrimary,
   },
   statusBadge: {
     paddingHorizontal: 8,
@@ -184,10 +182,10 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   statusPaid: {
-    backgroundColor: '#DCFCE7',
+    backgroundColor: Palette.mint,
   },
   statusUnpaid: {
-    backgroundColor: '#FEE2E2',
+    backgroundColor: Palette.dangerLight,
   },
   statusText: {
     fontSize: 10,
@@ -195,37 +193,38 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
   statusTextPaid: {
-    color: '#15803D',
+    color: Palette.mintDark,
   },
   statusTextUnpaid: {
-    color: '#B91C1C',
+    color: Palette.danger,
   },
   docNumber: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#0F172A',
+    color: Palette.textPrimary,
     marginBottom: 8,
   },
   amountBox: {
-    backgroundColor: '#F8FAFC',
-    borderRadius: 8,
+    backgroundColor: Palette.holoPink,
+    borderRadius: 10,
     padding: 10,
     marginBottom: 10,
   },
   amountLabel: {
     fontSize: 11,
-    color: '#64748B',
+    color: Palette.holoPinkDark,
     fontWeight: '600',
   },
   amountValue: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#0F172A',
+    color: Palette.textPrimary,
     marginTop: 2,
+    letterSpacing: -0.5,
   },
   dueDateText: {
     fontSize: 11,
-    color: '#94A3B8',
+    color: Palette.textSecondary,
     marginTop: 2,
   },
   actionRow: {
@@ -234,32 +233,27 @@ const styles = StyleSheet.create({
   },
   payButton: {
     flex: 1,
-    backgroundColor: '#0284C7',
+    backgroundColor: Palette.primary,
     borderRadius: 8,
     paddingVertical: 9,
     alignItems: 'center',
-    shadowColor: '#0284C7',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 2,
   },
   payButtonText: {
-    color: '#FFFFFF',
+    color: Palette.primaryText,
     fontSize: 12,
     fontWeight: '700',
   },
   viewButton: {
     flex: 1,
-    backgroundColor: '#F0F9FF',
+    backgroundColor: Palette.lilacLight,
     borderRadius: 8,
     paddingVertical: 9,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#BAE6FD',
+    borderColor: Palette.lilac,
   },
   viewButtonText: {
-    color: '#0284C7',
+    color: Palette.lilacDark,
     fontSize: 12,
     fontWeight: '700',
   },

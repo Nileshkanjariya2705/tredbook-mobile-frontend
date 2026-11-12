@@ -13,6 +13,7 @@ import { api } from '../services/api';
 import { ChatThreadScreen } from './ChatThreadScreen';
 import { useAuth } from '../context/AuthContext';
 import { StorySkeletonRow, ThreadSkeletonList } from '../components/SkeletonLoader';
+import { Palette, SoftShadow } from '../theme/colors';
 
 export interface ThreadItem {
   id: string;
@@ -257,13 +258,13 @@ export const SocialScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: Palette.background,
   },
   storiesSection: {
     paddingVertical: 14,
     borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
-    backgroundColor: '#FFFFFF',
+    borderBottomColor: Palette.border,
+    backgroundColor: Palette.surface,
   },
   storiesScroll: {
     paddingHorizontal: 16,
@@ -282,29 +283,29 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   addStoryCircle: {
-    backgroundColor: '#F0F9FF',
+    backgroundColor: Palette.lilacLight,
     borderWidth: 2,
-    borderColor: '#0284C7',
+    borderColor: Palette.lilac,
     borderStyle: 'dashed',
   },
   addStoryPlus: {
     fontSize: 26,
-    color: '#0284C7',
+    color: Palette.lilacDark,
     fontWeight: '700',
   },
   activeStoryCircle: {
-    backgroundColor: '#0284C7',
+    backgroundColor: Palette.mint,
     borderWidth: 2.5,
-    borderColor: '#38BDF8',
+    borderColor: Palette.mintLight,
   },
   storyAvatarText: {
-    color: '#FFFFFF',
+    color: Palette.mintDark,
     fontWeight: '800',
     fontSize: 16,
   },
   storyName: {
     fontSize: 11,
-    color: '#475569',
+    color: Palette.textSecondary,
     fontWeight: '600',
     textAlign: 'center',
   },
@@ -313,23 +314,24 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 14,
   },
   listTitle: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: '800',
-    color: '#0F172A',
+    color: Palette.textPrimary,
+    letterSpacing: -0.3,
   },
   newChatBtn: {
-    backgroundColor: '#F0F9FF',
+    backgroundColor: Palette.mintLight,
     borderWidth: 1,
-    borderColor: '#BAE6FD',
+    borderColor: Palette.mint,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 8,
   },
   newChatBtnText: {
-    color: '#0284C7',
+    color: Palette.mintDark,
     fontSize: 12,
     fontWeight: '700',
   },
@@ -351,29 +353,24 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#0F172A',
+    color: Palette.textPrimary,
     marginBottom: 6,
   },
   emptySubtitle: {
     fontSize: 13,
-    color: '#64748B',
+    color: Palette.textSecondary,
     textAlign: 'center',
     lineHeight: 20,
     marginBottom: 20,
   },
   startFirstChatBtn: {
-    backgroundColor: '#0284C7',
+    backgroundColor: Palette.primary,
     paddingHorizontal: 20,
-    paddingVertical: 11,
-    borderRadius: 10,
-    shadowColor: '#0284C7',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.25,
-    shadowRadius: 6,
-    elevation: 3,
+    paddingVertical: 12,
+    borderRadius: 12,
   },
   startFirstChatBtnText: {
-    color: '#FFFFFF',
+    color: Palette.primaryText,
     fontSize: 14,
     fontWeight: '700',
   },
@@ -382,22 +379,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 14,
+    backgroundColor: Palette.surface,
     borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
+    borderBottomColor: Palette.borderSubtle,
   },
   avatarCircle: {
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#0284C7',
+    backgroundColor: Palette.lilac,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
   },
   avatarText: {
     fontSize: 16,
-    fontWeight: '700',
-    color: '#FFFFFF',
+    fontWeight: '800',
+    color: Palette.lilacDark,
   },
   threadInfo: {
     flex: 1,
@@ -410,13 +408,13 @@ const styles = StyleSheet.create({
   threadTitle: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#0F172A',
+    color: Palette.textPrimary,
     flex: 1,
     marginRight: 8,
   },
   threadTime: {
     fontSize: 11,
-    color: '#94A3B8',
+    color: Palette.textSecondary,
   },
   threadBottomRow: {
     flexDirection: 'row',
@@ -425,12 +423,12 @@ const styles = StyleSheet.create({
   },
   lastSnippet: {
     fontSize: 13,
-    color: '#64748B',
+    color: Palette.textSecondary,
     flex: 1,
     marginRight: 10,
   },
   unreadBadge: {
-    backgroundColor: '#0284C7',
+    backgroundColor: Palette.primary,
     minWidth: 20,
     height: 20,
     borderRadius: 10,
@@ -441,6 +439,6 @@ const styles = StyleSheet.create({
   unreadBadgeText: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: Palette.primaryText,
   },
 });
