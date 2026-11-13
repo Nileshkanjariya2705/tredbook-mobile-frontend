@@ -19,6 +19,7 @@ import { AuthScreen } from './src/screens/AuthScreen';
 import { ProfileScreen } from './src/screens/ProfileScreen';
 import { SocialScreen } from './src/screens/SocialScreen';
 import { MarketplaceScreen } from './src/screens/MarketplaceScreen';
+import { BusinessScreen } from './src/screens/BusinessScreen';
 import { BiometricPromptModal } from './src/components/BiometricPromptModal';
 import { Palette, SoftShadow } from './src/theme/colors';
 
@@ -113,6 +114,8 @@ const MainAppContent: React.FC = () => {
         <SocialScreen />
       ) : activeTab === 'marketplace' ? (
         <MarketplaceScreen onNavigateToChat={() => setActiveTab('social')} />
+      ) : activeTab === 'business' ? (
+        <BusinessScreen onNavigateToChat={() => setActiveTab('social')} />
       ) : (
         <ScrollView contentContainerStyle={styles.contentContainer}>
           {/* Tab 1: Home Dashboard (PRD Section 6.1) */}
@@ -132,30 +135,6 @@ const MainAppContent: React.FC = () => {
                 <Text style={styles.tag}>PRD Section 6.1</Text>
                 <Text style={styles.tag}>Purchase Book Vault</Text>
                 <Text style={styles.tag}>Order Tracking</Text>
-              </View>
-            </View>
-          )}
-
-          {/* Tab 4: Business Ecosystem & Accounting (PRD Section 5 & tredbook-web) */}
-          {activeTab === 'business' && (
-            <View style={styles.card}>
-              <Text style={styles.cardEmoji}>📊</Text>
-              <Text style={styles.cardTitle}>Business Ecosystem & Accounting</Text>
-              <Text style={styles.cardDesc}>
-                Full business operating system: Accounting & Billing via tredbook-web, inventory,
-                CRM, Unified Business Inbox, and ESC/POS thermal printing bridge.
-              </Text>
-              <View style={styles.metaBox}>
-                <Text style={styles.metaTitle}>
-                  {activeCompany ? `Active: ${activeCompany.name}` : 'No Business Selected'}
-                </Text>
-                <Text style={styles.metaSub}>TrustScore (BTS): 820 (Very Strong)</Text>
-              </View>
-              <View style={styles.tagRow}>
-                <Text style={styles.tag}>FN-WEB-01 to 73</Text>
-                <Text style={styles.tag}>SSO Web Bridge</Text>
-                <Text style={styles.tag}>Unified Business Inbox</Text>
-                <Text style={styles.tag}>Mode 1/2/3 Sync</Text>
               </View>
             </View>
           )}
