@@ -118,6 +118,14 @@ export interface TranslationDictionary {
   acceptQuote: string;
   jobSheetOtp: string;
   serviceWarranty: string;
+
+  // B2B Wholesale Network (Module 11)
+  b2bWholesale: string;
+  b2bSubtitle: string;
+  requestRfq: string;
+  orderSample: string;
+  compareSuppliers: string;
+  purchaseOrderGenerated: string;
 }
 
 export const translations: Record<Language, TranslationDictionary> = {
@@ -239,6 +247,14 @@ export const translations: Record<Language, TranslationDictionary> = {
     acceptQuote: 'Accept Quote & Schedule',
     jobSheetOtp: 'Job Sheet Completion OTP',
     serviceWarranty: '90-Day Service Warranty',
+
+    // B2B Wholesale Network (Module 11)
+    b2bWholesale: 'B2B Wholesale Network',
+    b2bSubtitle: 'Direct factory procurement, tiered pricing & RFQ desk',
+    requestRfq: 'Request Quotation (RFQ)',
+    orderSample: 'Order Test Sample',
+    compareSuppliers: 'Compare Suppliers',
+    purchaseOrderGenerated: 'Purchase Order Issued',
   },
   hi: {
     // Navigation Tabs
@@ -358,5 +374,13 @@ export const translations: Record<Language, TranslationDictionary> = {
     acceptQuote: 'स्वीकार करें और समय तय करें',
     jobSheetOtp: 'कार्य समापन ओटीपी',
     serviceWarranty: '90-दिन की सेवा वारंटी',
+
+    // B2B Wholesale Network (Module 11)
+    b2bWholesale: 'B2B थोक व्यापार नेटवर्क',
+    b2bSubtitle: 'सीधी फ़ैक्टरी खरीद, थोक मूल्य और कोटेशन डेस्क',
+    requestRfq: 'थोक कोटेशन मांगें (RFQ)',
+    orderSample: 'सैंपल ऑर्डर करें',
+    compareSuppliers: 'सप्लायर्स की तुलना करें',
+    purchaseOrderGenerated: 'खरीद आदेश (PO) जारी हुआ',
   },
 };
