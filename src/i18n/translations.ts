@@ -144,6 +144,16 @@ export interface TranslationDictionary {
   deliveryOtp: string;
   handoverProof: string;
   driverContact: string;
+
+  // GST Compliance, e-Invoice & E-Way Bill (Module 14)
+  gstCompliance: string;
+  eInvoiceDesk: string;
+  eWayBillDesk: string;
+  generateIrn: string;
+  gstrSummary: string;
+  taxLiability: string;
+  interStateIgst: string;
+  intraStateGst: string;
 }
 
 export const translations: Record<Language, TranslationDictionary> = {
@@ -291,6 +301,16 @@ export const translations: Record<Language, TranslationDictionary> = {
     deliveryOtp: 'Delivery Handover OTP',
     handoverProof: 'Proof of Delivery Authorization',
     driverContact: 'Contact Rider',
+
+    // GST Compliance, e-Invoice & E-Way Bill (Module 14)
+    gstCompliance: 'GST & e-Way Compliance',
+    eInvoiceDesk: 'e-Invoicing & IRN Desk',
+    eWayBillDesk: 'E-Way Bill Generator',
+    generateIrn: 'Generate Official IRN',
+    gstrSummary: 'GSTR-1 & 3B Reconciliation',
+    taxLiability: 'Net Tax Liability',
+    interStateIgst: 'Inter-State Supply (IGST)',
+    intraStateGst: 'Intra-State Supply (CGST + SGST)',
   },
   hi: {
     // Navigation Tabs
@@ -436,5 +456,15 @@ export const translations: Record<Language, TranslationDictionary> = {
     deliveryOtp: 'डिलीवरी हैंडओवर ओटीपी',
     handoverProof: 'डिलीवरी प्रमाणिकरण',
     driverContact: 'राइडर से संपर्क करें',
+
+    // GST Compliance, e-Invoice & E-Way Bill (Module 14)
+    gstCompliance: 'जीएसटी और ई-वे बिल अनुपालन',
+    eInvoiceDesk: 'ई-इनवॉइस और IRN डेस्क',
+    eWayBillDesk: 'ई-वे बिल जनरेटर',
+    generateIrn: 'आधिकारिक IRN बनाएं',
+    gstrSummary: 'GSTR-1 और 3B कर विवरण',
+    taxLiability: 'शुद्ध कर देयता',
+    interStateIgst: 'अंतर-राज्यीय आपूर्ति (IGST)',
+    intraStateGst: 'राज्य के भीतर आपूर्ति (CGST + SGST)',
   },
 };

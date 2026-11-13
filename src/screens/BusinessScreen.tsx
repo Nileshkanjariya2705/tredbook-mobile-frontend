@@ -29,6 +29,7 @@ import { MerchantLoyaltyConfigModal } from '../components/MerchantLoyaltyConfigM
 import { B2bSupplierModal } from '../components/B2bSupplierModal';
 import { OfflineSyncModal } from '../components/OfflineSyncModal';
 import { DeliveryTrackingModal } from '../components/DeliveryTrackingModal';
+import { GstComplianceModal } from '../components/GstComplianceModal';
 import { Barcode, Scan } from 'lucide-react-native';
 
 interface BusinessScreenProps {
@@ -56,6 +57,7 @@ export const BusinessScreen: React.FC<BusinessScreenProps> = ({ onNavigateToChat
   const [showB2bModal, setShowB2bModal] = useState(false);
   const [showSyncModal, setShowSyncModal] = useState(false);
   const [showDeliveryModal, setShowDeliveryModal] = useState(false);
+  const [showGstModal, setShowGstModal] = useState(false);
   const [selectedOrderForPrint, setSelectedOrderForPrint] = useState<MerchantOrder | null>(null);
 
   const loadData = async () => {
@@ -302,6 +304,14 @@ export const BusinessScreen: React.FC<BusinessScreenProps> = ({ onNavigateToChat
             activeOpacity={0.7}
           >
             <Text style={styles.bridgeBtnText}>🚚 Delivery Fleet</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.bridgeBtn}
+            onPress={() => setShowGstModal(true)}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.bridgeBtnText}>🏛️ GST Compliance</Text>
           </TouchableOpacity>
         </View>
 
@@ -826,6 +836,11 @@ export const BusinessScreen: React.FC<BusinessScreenProps> = ({ onNavigateToChat
       <DeliveryTrackingModal
         visible={showDeliveryModal}
         onClose={() => setShowDeliveryModal(false)}
+      />
+
+      <GstComplianceModal
+        visible={showGstModal}
+        onClose={() => setShowGstModal(false)}
       />
     </View>
   );
