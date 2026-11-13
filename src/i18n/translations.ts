@@ -108,6 +108,16 @@ export interface TranslationDictionary {
   claimReferral: string;
   merchantLoyaltySettings: string;
   loyaltySubtitle: string;
+
+  // Local Services Network (Module 10)
+  servicesHub: string;
+  servicesSubtitle: string;
+  bookService: string;
+  inspectionFee: string;
+  requestQuote: string;
+  acceptQuote: string;
+  jobSheetOtp: string;
+  serviceWarranty: string;
 }
 
 export const translations: Record<Language, TranslationDictionary> = {
@@ -219,6 +229,16 @@ export const translations: Record<Language, TranslationDictionary> = {
     claimReferral: 'Have a Referral Code?',
     merchantLoyaltySettings: 'Merchant Loyalty Program',
     loyaltySubtitle: 'Configure point accruals and redemption discounts for customers',
+
+    // Local Services Network (Module 10)
+    servicesHub: 'Local Services Network',
+    servicesSubtitle: 'Verified technicians, repair experts & installation services',
+    bookService: 'Book Service',
+    inspectionFee: 'Inspection Fee',
+    requestQuote: 'Request Quotation',
+    acceptQuote: 'Accept Quote & Schedule',
+    jobSheetOtp: 'Job Sheet Completion OTP',
+    serviceWarranty: '90-Day Service Warranty',
   },
   hi: {
     // Navigation Tabs
@@ -328,5 +348,15 @@ export const translations: Record<Language, TranslationDictionary> = {
     claimReferral: 'क्या आपके पास रेफरल कोड है?',
     merchantLoyaltySettings: 'व्यापारी लॉयल्टी प्रोग्राम',
     loyaltySubtitle: 'ग्राहकों के लिए अंक अर्जन और छूट की सीमाएं सेट करें',
+
+    // Local Services Network (Module 10)
+    servicesHub: 'स्थानीय सेवा नेटवर्क',
+    servicesSubtitle: 'प्रमाणित तकनीशियन, मरम्मत विशेषज्ञ और फिटिंग सेवाएं',
+    bookService: 'सेवा बुक करें',
+    inspectionFee: 'निरीक्षण शुल्क',
+    requestQuote: 'कोटेशन मांगें',
+    acceptQuote: 'स्वीकार करें और समय तय करें',
+    jobSheetOtp: 'कार्य समापन ओटीपी',
+    serviceWarranty: '90-दिन की सेवा वारंटी',
   },
 };

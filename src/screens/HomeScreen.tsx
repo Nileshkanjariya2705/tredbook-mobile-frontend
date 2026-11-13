@@ -20,6 +20,7 @@ import {
 import { PurchaseBookModal } from '../components/PurchaseBookModal';
 import { LoyaltyModal } from '../components/LoyaltyModal';
 import { TrustProfileScreen } from './TrustProfileScreen';
+import { ServiceNetworkModal } from '../components/ServiceNetworkModal';
 import { Modal } from 'react-native';
 
 interface HomeScreenProps {
@@ -37,6 +38,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigateTab }) => {
   const [showPurchaseBookModal, setShowPurchaseBookModal] = useState(false);
   const [showLoyaltyModal, setShowLoyaltyModal] = useState(false);
   const [showTrustModal, setShowTrustModal] = useState(false);
+  const [showServicesModal, setShowServicesModal] = useState(false);
 
   const loadHomeData = async () => {
     try {
@@ -175,6 +177,22 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigateTab }) => {
             <Text style={styles.actionSub}>Live Stores</Text>
           </TouchableOpacity>
         </View>
+
+        {/* Local Services Network Banner (PRD Sec 9) */}
+        <TouchableOpacity
+          style={styles.servicesBanner}
+          onPress={() => setShowServicesModal(true)}
+          activeOpacity={0.8}
+        >
+          <View style={styles.servicesBannerLeft}>
+            <Text style={styles.servicesBannerEyebrow}>HYPER-LOCAL REPAIR & SERVICES (PRD SEC 9)</Text>
+            <Text style={styles.servicesBannerTitle}>🛠️ Local Services & Repair Desk</Text>
+            <Text style={styles.servicesBannerSub}>Book verified Electricians, AC, Mechanics & Jewellery Polish</Text>
+          </View>
+          <View style={styles.servicesBannerBadge}>
+            <Text style={styles.servicesBannerBadgeText}>Book ➔</Text>
+          </View>
+        </TouchableOpacity>
 
         {/* 3. Live Active Order Tracking Card */}
         {activeOrder && (
@@ -400,6 +418,11 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigateTab }) => {
           onClose={() => setShowTrustModal(false)}
         />
       </Modal>
+
+      <ServiceNetworkModal
+        visible={showServicesModal}
+        onClose={() => setShowServicesModal(false)}
+      />
     </View>
   );
 };
@@ -424,6 +447,49 @@ const styles = StyleSheet.create({
   scrollContent: {
     padding: 16,
     paddingBottom: 40,
+  },
+  servicesBanner: {
+    backgroundColor: '#EFF6FF',
+    borderRadius: 16,
+    padding: 14,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: '#BFDBFE',
+  },
+  servicesBannerLeft: {
+    flex: 1,
+    marginRight: 10,
+  },
+  servicesBannerEyebrow: {
+    fontSize: 9,
+    fontWeight: '700',
+    color: '#2563EB',
+    letterSpacing: 0.5,
+  },
+  servicesBannerTitle: {
+    fontSize: 14,
+    fontWeight: '800',
+    color: '#0F172A',
+    marginTop: 2,
+  },
+  servicesBannerSub: {
+    fontSize: 11,
+    color: '#1E40AF',
+    marginTop: 2,
+  },
+  servicesBannerBadge: {
+    backgroundColor: '#2563EB',
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    borderRadius: 10,
+  },
+  servicesBannerBadgeText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#FFFFFF',
   },
   heroCard: {
     backgroundColor: Palette.surface,
