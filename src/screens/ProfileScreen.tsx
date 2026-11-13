@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,14 +7,17 @@ import {
   TouchableOpacity,
   Alert,
   Switch,
+  Modal,
 } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { ShieldCheck, Building2, LogOut, QrCode, Award, Fingerprint } from 'lucide-react-native';
 import Toast from 'react-native-toast-message';
 import { useAuth, CompanySummary } from '../context/AuthContext';
 import { Palette, SoftShadow } from '../theme/colors';
+import { TrustProfileScreen } from './TrustProfileScreen';
 
 export const ProfileScreen: React.FC = () => {
+  const [showTrustModal, setShowTrustModal] = useState(false);
   const {
     user,
     companies,
@@ -117,6 +120,31 @@ export const ProfileScreen: React.FC = () => {
           Scan or show this QR at any participating store to receive your digital bills, warranties, and loyalty points directly in your Purchase Book.
         </Text>
       </View>
+
+      {/* Two-Way TrustProfile Card */}
+      <TouchableOpacity
+        style={styles.trustCard}
+        onPress={() => setShowTrustModal(true)}
+        activeOpacity={0.8}
+      >
+        <View style={styles.trustCardLeft}>
+          <Text style={styles.trustCardEyebrow}>COMMERCIAL REPUTATION PASSPORT (PRD SEC 11)</Text>
+          <Text style={styles.trustCardTitle}>Customer ReliabilityScore: CRS 750</Text>
+          <Text style={styles.trustCardSub}>⭐ Strong Conduct • View 6 score factors & verified reviews</Text>
+        </View>
+        <View style={styles.trustBadge}>
+          <Text style={styles.trustBadgeText}>View ➔</Text>
+        </View>
+      </TouchableOpacity>
+
+      {/* TrustProfile Modal */}
+      <Modal visible={showTrustModal} animationType="slide">
+        <TrustProfileScreen
+          initialMode="CRS"
+          companyId={activeCompanyId || '1'}
+          onClose={() => setShowTrustModal(false)}
+        />
+      </Modal>
 
       {/* Active Business / Company Context Switcher */}
       <View style={styles.sectionCard}>
@@ -229,6 +257,54 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Palette.border,
     ...SoftShadow.card,
+  },
+  trustCard: {
+    backgroundColor: Palette.mintLight,
+    borderRadius: 18,
+    padding: 16,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 18,
+    borderWidth: 1,
+    borderColor: Palette.mint,
+  },
+  trustCardLeft: {
+    flex: 1,
+    marginRight: 10,
+  },
+  trustCardEyebrow: {
+    fontSize: 9,
+    fontWeight: '700',
+    color: Palette.mintDark,
+    letterSpacing: 0.5,
+  },
+  trustCardTitle: {
+    fontSize: 14,
+    fontWeight: '800',
+    color: Palette.textPrimary,
+    marginTop: 2,
+  },
+  trustCardSub: {
+    fontSize: 11,
+    color: Palette.mintDark,
+    marginTop: 2,
+  },
+  trustBadge: {
+    backgroundColor: Palette.surface,
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 1,
+  },
+  trustBadgeText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: Palette.textPrimary,
   },
   avatarCircle: {
     width: 60,

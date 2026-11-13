@@ -19,6 +19,8 @@ import {
 } from '../services/home';
 import { PurchaseBookModal } from '../components/PurchaseBookModal';
 import { LoyaltyModal } from '../components/LoyaltyModal';
+import { TrustProfileScreen } from './TrustProfileScreen';
+import { Modal } from 'react-native';
 
 interface HomeScreenProps {
   onNavigateTab: (tab: 'social' | 'marketplace' | 'business' | 'profile') => void;
@@ -34,6 +36,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigateTab }) => {
   // Modals state
   const [showPurchaseBookModal, setShowPurchaseBookModal] = useState(false);
   const [showLoyaltyModal, setShowLoyaltyModal] = useState(false);
+  const [showTrustModal, setShowTrustModal] = useState(false);
 
   const loadHomeData = async () => {
     try {
@@ -110,11 +113,15 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigateTab }) => {
               </View>
             </View>
 
-            <View style={styles.crsBadge}>
+            <TouchableOpacity
+              style={styles.crsBadge}
+              onPress={() => setShowTrustModal(true)}
+              activeOpacity={0.8}
+            >
               <Text style={styles.crsLabel}>ReliabilityScore</Text>
               <Text style={styles.crsScore}>CRS {cust.reliabilityScore}</Text>
-              <Text style={styles.crsTier}>{cust.scoreTier}</Text>
-            </View>
+              <Text style={styles.crsTier}>{cust.scoreTier} ➔</Text>
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -386,6 +393,13 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigateTab }) => {
         onClose={() => setShowLoyaltyModal(false)}
         onRedeem={() => onNavigateTab('marketplace')}
       />
+
+      <Modal visible={showTrustModal} animationType="slide">
+        <TrustProfileScreen
+          initialMode="CRS"
+          onClose={() => setShowTrustModal(false)}
+        />
+      </Modal>
     </View>
   );
 };
