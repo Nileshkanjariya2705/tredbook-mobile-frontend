@@ -358,8 +358,8 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
   radiusChipActive: {
-    backgroundColor: Palette.primaryText,
-    borderColor: Palette.primaryText,
+    backgroundColor: Palette.primary,
+    borderColor: Palette.primary,
   },
   radiusChipText: {
     fontSize: 11,
@@ -367,7 +367,7 @@ const styles = StyleSheet.create({
     color: Palette.textSecondary,
   },
   radiusChipTextActive: {
-    color: '#FFFFFF',
+    color: Palette.primaryText,
   },
   categorySection: {
     marginBottom: 18,
@@ -401,7 +401,7 @@ const styles = StyleSheet.create({
     color: Palette.textSecondary,
   },
   categoryTextActive: {
-    color: Palette.primaryText,
+    color: Palette.textPrimary,
     fontWeight: '800',
   },
   shopsSection: {

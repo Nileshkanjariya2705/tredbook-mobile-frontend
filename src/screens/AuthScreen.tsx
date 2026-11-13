@@ -337,12 +337,14 @@ export const AuthScreen: React.FC = () => {
     }
   }, [googleResponse]);
 
-  // Pre-warm in-app Custom Tabs browser for instant, seamless in-app popup
+  // Pre-warm in-app Custom Tabs browser for instant, seamless in-app popup (native only)
   useEffect(() => {
-    WebBrowser.warmUpAsync();
-    return () => {
-      WebBrowser.coolDownAsync();
-    };
+    if (Platform.OS !== 'web') {
+      WebBrowser.warmUpAsync();
+      return () => {
+        WebBrowser.coolDownAsync();
+      };
+    }
   }, []);
 
   const handleGoogleLogin = async () => {
