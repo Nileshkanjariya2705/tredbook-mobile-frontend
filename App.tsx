@@ -12,9 +12,10 @@ import {
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { PaperProvider, MD3LightTheme } from 'react-native-paper';
-import { Home, MessageSquare, Store, BarChart3, User } from 'lucide-react-native';
+import { Home, MessageSquare, Store, BarChart3, User, Languages } from 'lucide-react-native';
 import Toast from 'react-native-toast-message';
 import { AuthProvider, useAuth } from './src/context/AuthContext';
+import { LanguageProvider, useLanguage } from './src/context/LanguageContext';
 import { AuthScreen } from './src/screens/AuthScreen';
 import { ProfileScreen } from './src/screens/ProfileScreen';
 import { SocialScreen } from './src/screens/SocialScreen';
@@ -38,6 +39,7 @@ const theme = {
 type NavigationTab = 'home' | 'social' | 'marketplace' | 'business' | 'profile';
 
 const MainAppContent: React.FC = () => {
+  const { t, language, setLanguage } = useLanguage();
   const {
     user,
     companies,
@@ -89,6 +91,16 @@ const MainAppContent: React.FC = () => {
           </Text>
         </View>
         <View style={styles.badgeRow}>
+          {/* Bilingual Language Switcher Pill */}
+          <TouchableOpacity
+            style={styles.langPill}
+            onPress={() => setLanguage(language === 'en' ? 'hi' : 'en')}
+            activeOpacity={0.8}
+          >
+            <Languages size={14} color="#7C3AED" />
+            <Text style={styles.langPillText}>{language === 'en' ? 'हिन्दी' : 'English'}</Text>
+          </TouchableOpacity>
+
           {activeCompany ? (
             <View style={styles.companyBadge}>
               <Text style={styles.companyBadgeText}>{activeCompany.name}</Text>
@@ -121,14 +133,14 @@ const MainAppContent: React.FC = () => {
         <HomeScreen onNavigateTab={(tab) => setActiveTab(tab)} />
       )}
 
-      {/* 5-Item Bottom Navigation Bar (PRD Section 19) */}
+      {/* 5-Item Bottom Navigation Bar (PRD Section 19 & Section 18) */}
       <View style={styles.tabBar}>
         <TouchableOpacity
           style={[styles.tabButton, activeTab === 'home' && styles.tabButtonActive]}
           onPress={() => setActiveTab('home')}
         >
           <Home size={20} color={activeTab === 'home' ? Palette.primary : Palette.textSecondary} strokeWidth={activeTab === 'home' ? 2.5 : 1.8} />
-          <Text style={[styles.tabText, activeTab === 'home' && styles.tabTextActive]}>Home</Text>
+          <Text style={[styles.tabText, activeTab === 'home' && styles.tabTextActive]}>{t.tabHome}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -136,7 +148,7 @@ const MainAppContent: React.FC = () => {
           onPress={() => setActiveTab('social')}
         >
           <MessageSquare size={20} color={activeTab === 'social' ? Palette.primary : Palette.textSecondary} strokeWidth={activeTab === 'social' ? 2.5 : 1.8} />
-          <Text style={[styles.tabText, activeTab === 'social' && styles.tabTextActive]}>Social</Text>
+          <Text style={[styles.tabText, activeTab === 'social' && styles.tabTextActive]}>{t.tabSocial}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -144,7 +156,7 @@ const MainAppContent: React.FC = () => {
           onPress={() => setActiveTab('marketplace')}
         >
           <Store size={20} color={activeTab === 'marketplace' ? Palette.primary : Palette.textSecondary} strokeWidth={activeTab === 'marketplace' ? 2.5 : 1.8} />
-          <Text style={[styles.tabText, activeTab === 'marketplace' && styles.tabTextActive]}>Market</Text>
+          <Text style={[styles.tabText, activeTab === 'marketplace' && styles.tabTextActive]}>{t.tabMarket}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -152,7 +164,7 @@ const MainAppContent: React.FC = () => {
           onPress={() => setActiveTab('business')}
         >
           <BarChart3 size={20} color={activeTab === 'business' ? Palette.primary : Palette.textSecondary} strokeWidth={activeTab === 'business' ? 2.5 : 1.8} />
-          <Text style={[styles.tabText, activeTab === 'business' && styles.tabTextActive]}>Business</Text>
+          <Text style={[styles.tabText, activeTab === 'business' && styles.tabTextActive]}>{t.tabBusiness}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -160,7 +172,7 @@ const MainAppContent: React.FC = () => {
           onPress={() => setActiveTab('profile')}
         >
           <User size={20} color={activeTab === 'profile' ? Palette.primary : Palette.textSecondary} strokeWidth={activeTab === 'profile' ? 2.5 : 1.8} />
-          <Text style={[styles.tabText, activeTab === 'profile' && styles.tabTextActive]}>Profile</Text>
+          <Text style={[styles.tabText, activeTab === 'profile' && styles.tabTextActive]}>{t.tabProfile}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -171,10 +183,12 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <PaperProvider theme={theme}>
-        <AuthProvider>
-          <MainAppContent />
-          <Toast />
-        </AuthProvider>
+        <LanguageProvider>
+          <AuthProvider>
+            <MainAppContent />
+            <Toast />
+          </AuthProvider>
+        </LanguageProvider>
       </PaperProvider>
     </SafeAreaProvider>
   );
@@ -222,6 +236,23 @@ const styles = StyleSheet.create({
   badgeRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 8,
+  },
+  langPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: '#FAF5FF',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#DDD6FE',
+  },
+  langPillText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#7C3AED',
   },
   onlineBadge: {
     backgroundColor: Palette.mint,

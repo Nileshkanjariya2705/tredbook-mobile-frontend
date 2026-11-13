@@ -24,6 +24,8 @@ import { CreateCompanyModal } from '../components/CreateCompanyModal';
 import { CreateItemModal } from '../components/CreateItemModal';
 import { ThermalPrinterModal } from '../components/ThermalPrinterModal';
 import { SubscriptionModal } from '../components/SubscriptionModal';
+import { UniversalScannerModal } from '../components/UniversalScannerModal';
+import { Barcode, Scan } from 'lucide-react-native';
 
 interface BusinessScreenProps {
   onNavigateToChat?: (threadId: string, recipientName: string) => void;
@@ -45,6 +47,7 @@ export const BusinessScreen: React.FC<BusinessScreenProps> = ({ onNavigateToChat
   const [showCreateItem, setShowCreateItem] = useState(false);
   const [showPrinterModal, setShowPrinterModal] = useState(false);
   const [showSubModal, setShowSubModal] = useState(false);
+  const [showScannerModal, setShowScannerModal] = useState(false);
   const [selectedOrderForPrint, setSelectedOrderForPrint] = useState<MerchantOrder | null>(null);
 
   const loadData = async () => {
@@ -630,6 +633,13 @@ export const BusinessScreen: React.FC<BusinessScreenProps> = ({ onNavigateToChat
                 onChangeText={setSearchItemQuery}
               />
               <TouchableOpacity
+                style={styles.scanBarcodeBtn}
+                onPress={() => setShowScannerModal(true)}
+                activeOpacity={0.7}
+              >
+                <Barcode size={18} color="#7C3AED" />
+              </TouchableOpacity>
+              <TouchableOpacity
                 style={styles.addInventoryBtn}
                 onPress={() => setShowCreateItem(true)}
                 activeOpacity={0.7}
@@ -748,6 +758,13 @@ export const BusinessScreen: React.FC<BusinessScreenProps> = ({ onNavigateToChat
         onClose={() => setShowSubModal(false)}
         companyId={Number(currentComp.id || 1)}
         onPlanUpdated={loadData}
+      />
+
+      <UniversalScannerModal
+        visible={showScannerModal}
+        onClose={() => setShowScannerModal(false)}
+        defaultMode="barcode"
+        onScanResult={(code) => setSearchItemQuery(code)}
       />
     </View>
   );
@@ -1288,6 +1305,17 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: Palette.textPrimary,
     marginRight: 8,
+  },
+  scanBarcodeBtn: {
+    backgroundColor: '#FAF5FF',
+    borderWidth: 1,
+    borderColor: '#DDD6FE',
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    borderRadius: 12,
+    marginRight: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   addInventoryBtn: {
     backgroundColor: Palette.primary,

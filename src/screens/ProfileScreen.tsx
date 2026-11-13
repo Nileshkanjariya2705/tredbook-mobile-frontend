@@ -10,18 +10,22 @@ import {
   Modal,
 } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
-import { ShieldCheck, Building2, LogOut, QrCode, Award, Fingerprint, Sparkles, Shield } from 'lucide-react-native';
+import { ShieldCheck, Building2, LogOut, QrCode, Award, Fingerprint, Sparkles, Shield, Languages, Smartphone } from 'lucide-react-native';
 import Toast from 'react-native-toast-message';
 import { useAuth, CompanySummary } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import { Palette, SoftShadow } from '../theme/colors';
 import { TrustProfileScreen } from './TrustProfileScreen';
 import { SubscriptionModal } from '../components/SubscriptionModal';
 import { AdminWorkbenchModal } from './admin/AdminWorkbenchModal';
+import { SessionManagerModal } from '../components/SessionManagerModal';
 
 export const ProfileScreen: React.FC = () => {
+  const { t, language, setLanguage } = useLanguage();
   const [showTrustModal, setShowTrustModal] = useState(false);
   const [showSubModal, setShowSubModal] = useState(false);
   const [showAdminModal, setShowAdminModal] = useState(false);
+  const [showSessionModal, setShowSessionModal] = useState(false);
   const {
     user,
     companies,
@@ -194,6 +198,59 @@ export const ProfileScreen: React.FC = () => {
         visible={showAdminModal}
         onClose={() => setShowAdminModal(false)}
       />
+
+      {/* Multi-Device Session Manager Modal */}
+      <SessionManagerModal
+        visible={showSessionModal}
+        onClose={() => setShowSessionModal(false)}
+      />
+
+      {/* App Language Selection (PRD Section 18 / Rule 19) */}
+      <View style={styles.sectionCard}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+          <Languages size={18} color={Palette.textPrimary} />
+          <Text style={styles.sectionTitle}>{t.languageSelect}</Text>
+        </View>
+        <Text style={styles.sectionSubtitle}>
+          Choose your preferred interface language / अपनी पसंदीदा भाषा चुनें
+        </Text>
+
+        <View style={styles.langToggleRow}>
+          <TouchableOpacity
+            style={[styles.langChoiceBtn, language === 'en' && styles.langChoiceBtnActive]}
+            onPress={() => setLanguage('en')}
+          >
+            <Text style={[styles.langChoiceText, language === 'en' && styles.langChoiceTextActive]}>
+              English (EN)
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.langChoiceBtn, language === 'hi' && styles.langChoiceBtnActive]}
+            onPress={() => setLanguage('hi')}
+          >
+            <Text style={[styles.langChoiceText, language === 'hi' && styles.langChoiceTextActive]}>
+              हिन्दी (HI)
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      {/* Multi-Device Session Security Card (PRD Section 13 / FN-AUTH-02) */}
+      <TouchableOpacity
+        style={styles.sessionCardEntry}
+        onPress={() => setShowSessionModal(true)}
+        activeOpacity={0.8}
+      >
+        <View style={{ flex: 1, marginRight: 10 }}>
+          <Text style={styles.sessionEyebrow}>DEVICE GOVERNANCE & ACCESS CONTROL</Text>
+          <Text style={styles.sessionTitle}>{t.deviceSessions}</Text>
+          <Text style={styles.sessionSub}>View logged-in devices & terminate suspicious sessions</Text>
+        </View>
+        <View style={styles.sessionBadge}>
+          <Text style={styles.sessionBadgeText}>Manage ➔</Text>
+        </View>
+      </TouchableOpacity>
 
       {/* Active Business / Company Context Switcher */}
       <View style={styles.sectionCard}>
@@ -400,6 +457,73 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   adminBadgeText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#FFFFFF',
+  },
+  langToggleRow: {
+    flexDirection: 'row',
+    gap: 10,
+    marginTop: 8,
+  },
+  langChoiceBtn: {
+    flex: 1,
+    paddingVertical: 10,
+    borderRadius: 10,
+    backgroundColor: '#F3F4F6',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+  },
+  langChoiceBtnActive: {
+    backgroundColor: '#FAF5FF',
+    borderColor: '#7C3AED',
+  },
+  langChoiceText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#4B5563',
+  },
+  langChoiceTextActive: {
+    color: '#7C3AED',
+    fontWeight: '700',
+  },
+  sessionCardEntry: {
+    backgroundColor: '#F0FDF4',
+    borderRadius: 18,
+    padding: 16,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 18,
+    borderWidth: 1,
+    borderColor: '#BBF7D0',
+  },
+  sessionEyebrow: {
+    fontSize: 9,
+    fontWeight: '700',
+    color: '#059669',
+    letterSpacing: 0.5,
+  },
+  sessionTitle: {
+    fontSize: 14,
+    fontWeight: '800',
+    color: Palette.textPrimary,
+    marginTop: 2,
+  },
+  sessionSub: {
+    fontSize: 11,
+    color: '#047857',
+    marginTop: 2,
+  },
+  sessionBadge: {
+    backgroundColor: '#059669',
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    borderRadius: 10,
+  },
+  sessionBadgeText: {
     fontSize: 12,
     fontWeight: '700',
     color: '#FFFFFF',
