@@ -135,6 +135,15 @@ export interface TranslationDictionary {
   conflictResolved: string;
   syncNow: string;
   simulateOffline: string;
+
+  // Delivery Fleet & Live Tracking (Module 13)
+  deliveryTracking: string;
+  deliveryFleet: string;
+  assignRider: string;
+  outForDelivery: string;
+  deliveryOtp: string;
+  handoverProof: string;
+  driverContact: string;
 }
 
 export const translations: Record<Language, TranslationDictionary> = {
@@ -273,6 +282,15 @@ export const translations: Record<Language, TranslationDictionary> = {
     conflictResolved: 'Auto-Resolved Conflict',
     syncNow: 'Sync Outbox Now',
     simulateOffline: 'Simulate Offline Mode',
+
+    // Delivery Fleet & Live Tracking (Module 13)
+    deliveryTracking: 'Live Hyper-Local Tracking',
+    deliveryFleet: 'Delivery Partner Fleet',
+    assignRider: 'Assign Delivery Partner',
+    outForDelivery: 'Out for Delivery',
+    deliveryOtp: 'Delivery Handover OTP',
+    handoverProof: 'Proof of Delivery Authorization',
+    driverContact: 'Contact Rider',
   },
   hi: {
     // Navigation Tabs
@@ -409,5 +427,14 @@ export const translations: Record<Language, TranslationDictionary> = {
     conflictResolved: 'स्वतः सुलझाया गया डेटा विवाद',
     syncNow: 'अभी सिंक करें',
     simulateOffline: 'ऑफ़लाइन मोड का परीक्षण करें',
+
+    // Delivery Fleet & Live Tracking (Module 13)
+    deliveryTracking: 'लाइव डिलीवरी ट्रैकिंग',
+    deliveryFleet: 'डिलीवरी पार्टनर फ्लीट',
+    assignRider: 'राइडर असाइन करें',
+    outForDelivery: 'डिलीवरी के लिए रवाना',
+    deliveryOtp: 'डिलीवरी हैंडओवर ओटीपी',
+    handoverProof: 'डिलीवरी प्रमाणिकरण',
+    driverContact: 'राइडर से संपर्क करें',
   },
 };

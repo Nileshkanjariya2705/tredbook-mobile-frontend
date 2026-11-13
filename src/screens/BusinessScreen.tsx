@@ -28,6 +28,7 @@ import { UniversalScannerModal } from '../components/UniversalScannerModal';
 import { MerchantLoyaltyConfigModal } from '../components/MerchantLoyaltyConfigModal';
 import { B2bSupplierModal } from '../components/B2bSupplierModal';
 import { OfflineSyncModal } from '../components/OfflineSyncModal';
+import { DeliveryTrackingModal } from '../components/DeliveryTrackingModal';
 import { Barcode, Scan } from 'lucide-react-native';
 
 interface BusinessScreenProps {
@@ -54,6 +55,7 @@ export const BusinessScreen: React.FC<BusinessScreenProps> = ({ onNavigateToChat
   const [showLoyaltyModal, setShowLoyaltyModal] = useState(false);
   const [showB2bModal, setShowB2bModal] = useState(false);
   const [showSyncModal, setShowSyncModal] = useState(false);
+  const [showDeliveryModal, setShowDeliveryModal] = useState(false);
   const [selectedOrderForPrint, setSelectedOrderForPrint] = useState<MerchantOrder | null>(null);
 
   const loadData = async () => {
@@ -292,6 +294,14 @@ export const BusinessScreen: React.FC<BusinessScreenProps> = ({ onNavigateToChat
             activeOpacity={0.7}
           >
             <Text style={styles.bridgeBtnText}>⚡ Offline Sync</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.bridgeBtn}
+            onPress={() => setShowDeliveryModal(true)}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.bridgeBtnText}>🚚 Delivery Fleet</Text>
           </TouchableOpacity>
         </View>
 
@@ -811,6 +821,11 @@ export const BusinessScreen: React.FC<BusinessScreenProps> = ({ onNavigateToChat
       <OfflineSyncModal
         visible={showSyncModal}
         onClose={() => setShowSyncModal(false)}
+      />
+
+      <DeliveryTrackingModal
+        visible={showDeliveryModal}
+        onClose={() => setShowDeliveryModal(false)}
       />
     </View>
   );
