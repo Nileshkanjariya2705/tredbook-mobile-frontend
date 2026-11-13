@@ -10,14 +10,18 @@ import {
   Modal,
 } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
-import { ShieldCheck, Building2, LogOut, QrCode, Award, Fingerprint } from 'lucide-react-native';
+import { ShieldCheck, Building2, LogOut, QrCode, Award, Fingerprint, Sparkles, Shield } from 'lucide-react-native';
 import Toast from 'react-native-toast-message';
 import { useAuth, CompanySummary } from '../context/AuthContext';
 import { Palette, SoftShadow } from '../theme/colors';
 import { TrustProfileScreen } from './TrustProfileScreen';
+import { SubscriptionModal } from '../components/SubscriptionModal';
+import { AdminWorkbenchModal } from './admin/AdminWorkbenchModal';
 
 export const ProfileScreen: React.FC = () => {
   const [showTrustModal, setShowTrustModal] = useState(false);
+  const [showSubModal, setShowSubModal] = useState(false);
+  const [showAdminModal, setShowAdminModal] = useState(false);
   const {
     user,
     companies,
@@ -146,6 +150,51 @@ export const ProfileScreen: React.FC = () => {
         />
       </Modal>
 
+      {/* Subscription & Monetization Card (FN-SUBS-05) */}
+      <TouchableOpacity
+        style={styles.subCard}
+        onPress={() => setShowSubModal(true)}
+        activeOpacity={0.8}
+      >
+        <View style={styles.subCardLeft}>
+          <Text style={styles.subCardEyebrow}>MULTI-TIER BUSINESS SUBSCRIPTIONS (FN-SUBS-05)</Text>
+          <Text style={styles.subCardTitle}>⚡ Plans, Quotas & Auto-Renewal</Text>
+          <Text style={styles.subCardSub}>Active: Standard MSME • Unlimited items & ESC/POS bridge</Text>
+        </View>
+        <View style={styles.subBadge}>
+          <Text style={styles.subBadgeText}>Manage ➔</Text>
+        </View>
+      </TouchableOpacity>
+
+      {/* Super Admin Governance Card (PRD Sec 14) */}
+      <TouchableOpacity
+        style={styles.adminCard}
+        onPress={() => setShowAdminModal(true)}
+        activeOpacity={0.8}
+      >
+        <View style={styles.adminCardLeft}>
+          <Text style={styles.adminCardEyebrow}>PLATFORM GOVERNANCE & MODERATION (PRD SEC 14)</Text>
+          <Text style={styles.adminCardTitle}>🛡️ Super Admin Workbench</Text>
+          <Text style={styles.adminCardSub}>KYC approvals, catalog moderation & 48h SLA dispute arbiter</Text>
+        </View>
+        <View style={styles.adminBadge}>
+          <Text style={styles.adminBadgeText}>Open ➔</Text>
+        </View>
+      </TouchableOpacity>
+
+      {/* Subscription Modal */}
+      <SubscriptionModal
+        visible={showSubModal}
+        onClose={() => setShowSubModal(false)}
+        companyId={Number(activeCompanyId || 1)}
+      />
+
+      {/* Super Admin Workbench Modal */}
+      <AdminWorkbenchModal
+        visible={showAdminModal}
+        onClose={() => setShowAdminModal(false)}
+      />
+
       {/* Active Business / Company Context Switcher */}
       <View style={styles.sectionCard}>
         <Text style={styles.sectionTitle}>Business & Company Context</Text>
@@ -268,6 +317,92 @@ const styles = StyleSheet.create({
     marginBottom: 18,
     borderWidth: 1,
     borderColor: Palette.mint,
+  },
+  subCard: {
+    backgroundColor: '#FAF5FF',
+    borderRadius: 18,
+    padding: 16,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 18,
+    borderWidth: 1,
+    borderColor: '#E9D5FF',
+  },
+  subCardLeft: {
+    flex: 1,
+    marginRight: 10,
+  },
+  subCardEyebrow: {
+    fontSize: 9,
+    fontWeight: '700',
+    color: '#7C3AED',
+    letterSpacing: 0.5,
+  },
+  subCardTitle: {
+    fontSize: 14,
+    fontWeight: '800',
+    color: Palette.textPrimary,
+    marginTop: 2,
+  },
+  subCardSub: {
+    fontSize: 11,
+    color: '#6B7280',
+    marginTop: 2,
+  },
+  subBadge: {
+    backgroundColor: '#7C3AED',
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    borderRadius: 10,
+  },
+  subBadgeText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#FFFFFF',
+  },
+  adminCard: {
+    backgroundColor: '#FEF2F2',
+    borderRadius: 18,
+    padding: 16,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 18,
+    borderWidth: 1,
+    borderColor: '#FECACA',
+  },
+  adminCardLeft: {
+    flex: 1,
+    marginRight: 10,
+  },
+  adminCardEyebrow: {
+    fontSize: 9,
+    fontWeight: '700',
+    color: '#DC2626',
+    letterSpacing: 0.5,
+  },
+  adminCardTitle: {
+    fontSize: 14,
+    fontWeight: '800',
+    color: Palette.textPrimary,
+    marginTop: 2,
+  },
+  adminCardSub: {
+    fontSize: 11,
+    color: '#6B7280',
+    marginTop: 2,
+  },
+  adminBadge: {
+    backgroundColor: '#DC2626',
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    borderRadius: 10,
+  },
+  adminBadgeText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#FFFFFF',
   },
   trustCardLeft: {
     flex: 1,

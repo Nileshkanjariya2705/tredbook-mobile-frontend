@@ -23,6 +23,7 @@ import {
 import { CreateCompanyModal } from '../components/CreateCompanyModal';
 import { CreateItemModal } from '../components/CreateItemModal';
 import { ThermalPrinterModal } from '../components/ThermalPrinterModal';
+import { SubscriptionModal } from '../components/SubscriptionModal';
 
 interface BusinessScreenProps {
   onNavigateToChat?: (threadId: string, recipientName: string) => void;
@@ -43,6 +44,7 @@ export const BusinessScreen: React.FC<BusinessScreenProps> = ({ onNavigateToChat
   const [showCreateCompany, setShowCreateCompany] = useState(false);
   const [showCreateItem, setShowCreateItem] = useState(false);
   const [showPrinterModal, setShowPrinterModal] = useState(false);
+  const [showSubModal, setShowSubModal] = useState(false);
   const [selectedOrderForPrint, setSelectedOrderForPrint] = useState<MerchantOrder | null>(null);
 
   const loadData = async () => {
@@ -305,6 +307,25 @@ export const BusinessScreen: React.FC<BusinessScreenProps> = ({ onNavigateToChat
         {/* ==================================================== */}
         {activeTab === 'overview' && (
           <View>
+            {/* Multi-Tier Subscription Banner (FN-SUBS-05) */}
+            <TouchableOpacity
+              style={styles.subBanner}
+              onPress={() => setShowSubModal(true)}
+              activeOpacity={0.8}
+            >
+              <View style={styles.subBannerLeft}>
+                <View style={styles.subBannerPill}>
+                  <View style={styles.subGreenDot} />
+                  <Text style={styles.subBannerPillText}>Standard MSME Plan Active</Text>
+                </View>
+                <Text style={styles.subBannerTitle}>Unlimited Catalog & ESC/POS Printing</Text>
+                <Text style={styles.subBannerSub}>2x Radius Search Boost • Next renewal in 30 days</Text>
+              </View>
+              <View style={styles.subUpgradeBtn}>
+                <Text style={styles.subUpgradeBtnText}>Manage ➔</Text>
+              </View>
+            </TouchableOpacity>
+
             {/* KPI Cards Row */}
             <View style={styles.kpiRow}>
               {/* Revenue */}
@@ -721,6 +742,13 @@ export const BusinessScreen: React.FC<BusinessScreenProps> = ({ onNavigateToChat
         gstNumber={currentComp.gstNumber}
         onClose={() => setShowPrinterModal(false)}
       />
+
+      <SubscriptionModal
+        visible={showSubModal}
+        onClose={() => setShowSubModal(false)}
+        companyId={Number(currentComp.id || 1)}
+        onPlanUpdated={loadData}
+      />
     </View>
   );
 };
@@ -741,6 +769,64 @@ const styles = StyleSheet.create({
     color: Palette.textSecondary,
     marginTop: 10,
     fontWeight: '500',
+  },
+  subBanner: {
+    backgroundColor: '#FAF5FF',
+    borderRadius: 16,
+    padding: 14,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+    borderWidth: 1.5,
+    borderColor: '#DDD6FE',
+  },
+  subBannerLeft: {
+    flex: 1,
+    marginRight: 10,
+  },
+  subBannerPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#EDE9FE',
+    alignSelf: 'flex-start',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 8,
+    gap: 6,
+    marginBottom: 6,
+  },
+  subGreenDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: '#10B981',
+  },
+  subBannerPillText: {
+    fontSize: 10,
+    fontWeight: '800',
+    color: '#6D28D9',
+  },
+  subBannerTitle: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: Palette.textPrimary,
+  },
+  subBannerSub: {
+    fontSize: 11,
+    color: '#6B7280',
+    marginTop: 2,
+  },
+  subUpgradeBtn: {
+    backgroundColor: '#7C3AED',
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    borderRadius: 10,
+  },
+  subUpgradeBtnText: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: '700',
   },
   header: {
     backgroundColor: Palette.surface,
