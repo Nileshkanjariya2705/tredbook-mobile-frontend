@@ -25,6 +25,7 @@ import { CreateItemModal } from '../components/CreateItemModal';
 import { ThermalPrinterModal } from '../components/ThermalPrinterModal';
 import { SubscriptionModal } from '../components/SubscriptionModal';
 import { UniversalScannerModal } from '../components/UniversalScannerModal';
+import { MerchantLoyaltyConfigModal } from '../components/MerchantLoyaltyConfigModal';
 import { Barcode, Scan } from 'lucide-react-native';
 
 interface BusinessScreenProps {
@@ -48,6 +49,7 @@ export const BusinessScreen: React.FC<BusinessScreenProps> = ({ onNavigateToChat
   const [showPrinterModal, setShowPrinterModal] = useState(false);
   const [showSubModal, setShowSubModal] = useState(false);
   const [showScannerModal, setShowScannerModal] = useState(false);
+  const [showLoyaltyModal, setShowLoyaltyModal] = useState(false);
   const [selectedOrderForPrint, setSelectedOrderForPrint] = useState<MerchantOrder | null>(null);
 
   const loadData = async () => {
@@ -262,6 +264,14 @@ export const BusinessScreen: React.FC<BusinessScreenProps> = ({ onNavigateToChat
             activeOpacity={0.7}
           >
             <Text style={styles.bridgeBtnText}>➕ Add Item</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.bridgeBtn}
+            onPress={() => setShowLoyaltyModal(true)}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.bridgeBtnText}>🎁 Loyalty</Text>
           </TouchableOpacity>
         </View>
 
@@ -765,6 +775,12 @@ export const BusinessScreen: React.FC<BusinessScreenProps> = ({ onNavigateToChat
         onClose={() => setShowScannerModal(false)}
         defaultMode="barcode"
         onScanResult={(code) => setSearchItemQuery(code)}
+      />
+
+      <MerchantLoyaltyConfigModal
+        visible={showLoyaltyModal}
+        companyId={Number(currentComp.id || 1)}
+        onClose={() => setShowLoyaltyModal(false)}
       />
     </View>
   );

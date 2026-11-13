@@ -10,7 +10,7 @@ import {
   Modal,
 } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
-import { ShieldCheck, Building2, LogOut, QrCode, Award, Fingerprint, Sparkles, Shield, Languages, Smartphone } from 'lucide-react-native';
+import { ShieldCheck, Building2, LogOut, QrCode, Award, Fingerprint, Sparkles, Shield, Languages, Smartphone, Gift } from 'lucide-react-native';
 import Toast from 'react-native-toast-message';
 import { useAuth, CompanySummary } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
@@ -19,6 +19,7 @@ import { TrustProfileScreen } from './TrustProfileScreen';
 import { SubscriptionModal } from '../components/SubscriptionModal';
 import { AdminWorkbenchModal } from './admin/AdminWorkbenchModal';
 import { SessionManagerModal } from '../components/SessionManagerModal';
+import { CustomerReferralModal } from '../components/CustomerReferralModal';
 
 export const ProfileScreen: React.FC = () => {
   const { t, language, setLanguage } = useLanguage();
@@ -26,6 +27,7 @@ export const ProfileScreen: React.FC = () => {
   const [showSubModal, setShowSubModal] = useState(false);
   const [showAdminModal, setShowAdminModal] = useState(false);
   const [showSessionModal, setShowSessionModal] = useState(false);
+  const [showReferralModal, setShowReferralModal] = useState(false);
   const {
     user,
     companies,
@@ -185,6 +187,28 @@ export const ProfileScreen: React.FC = () => {
           <Text style={styles.adminBadgeText}>Open ➔</Text>
         </View>
       </TouchableOpacity>
+
+      {/* Customer Referral & Loyalty Card (PRD Sec 8 & FN-PART-12) */}
+      <TouchableOpacity
+        style={styles.referralCard}
+        onPress={() => setShowReferralModal(true)}
+        activeOpacity={0.8}
+      >
+        <View style={styles.referralCardLeft}>
+          <Text style={styles.referralCardEyebrow}>CUSTOMER REFERRAL & REWARDS (PRD SEC 8)</Text>
+          <Text style={styles.referralCardTitle}>🎁 {t.referralAndRewards}</Text>
+          <Text style={styles.referralCardSub}>Invite friends & earn ₹100 TredCoins on their first purchase</Text>
+        </View>
+        <View style={styles.referralBadge}>
+          <Text style={styles.referralBadgeText}>Open ➔</Text>
+        </View>
+      </TouchableOpacity>
+
+      {/* Customer Referral Modal */}
+      <CustomerReferralModal
+        visible={showReferralModal}
+        onClose={() => setShowReferralModal(false)}
+      />
 
       {/* Subscription Modal */}
       <SubscriptionModal
@@ -457,6 +481,49 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   adminBadgeText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#FFFFFF',
+  },
+  referralCard: {
+    backgroundColor: '#FFFBEB',
+    borderRadius: 18,
+    padding: 16,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 18,
+    borderWidth: 1,
+    borderColor: '#FDE68A',
+  },
+  referralCardLeft: {
+    flex: 1,
+    marginRight: 10,
+  },
+  referralCardEyebrow: {
+    fontSize: 9,
+    fontWeight: '700',
+    color: '#D97706',
+    letterSpacing: 0.5,
+  },
+  referralCardTitle: {
+    fontSize: 14,
+    fontWeight: '800',
+    color: Palette.textPrimary,
+    marginTop: 2,
+  },
+  referralCardSub: {
+    fontSize: 11,
+    color: '#92400E',
+    marginTop: 2,
+  },
+  referralBadge: {
+    backgroundColor: '#D97706',
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    borderRadius: 10,
+  },
+  referralBadgeText: {
     fontSize: 12,
     fontWeight: '700',
     color: '#FFFFFF',

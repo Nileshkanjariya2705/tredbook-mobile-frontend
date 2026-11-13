@@ -96,6 +96,18 @@ export interface TranslationDictionary {
   currentDevice: string;
   logOutAllOther: string;
   lastActive: string;
+
+  // Loyalty & Referrals
+  referralAndRewards: string;
+  referralTitle: string;
+  referralSubtitle: string;
+  copyCode: string;
+  shareWhatsapp: string;
+  friendsReferred: string;
+  coinsEarned: string;
+  claimReferral: string;
+  merchantLoyaltySettings: string;
+  loyaltySubtitle: string;
 }
 
 export const translations: Record<Language, TranslationDictionary> = {
@@ -195,6 +207,18 @@ export const translations: Record<Language, TranslationDictionary> = {
     currentDevice: 'Current Device',
     logOutAllOther: 'Log Out From All Other Devices',
     lastActive: 'Last active',
+
+    // Loyalty & Referrals
+    referralAndRewards: 'Refer & Earn Rewards',
+    referralTitle: 'Customer Referral Network',
+    referralSubtitle: 'Share TredBook with friends and earn TredCoins on their first purchase',
+    copyCode: 'Copy Code',
+    shareWhatsapp: 'Share via WhatsApp',
+    friendsReferred: 'Friends Referred',
+    coinsEarned: 'Total Coins Earned',
+    claimReferral: 'Have a Referral Code?',
+    merchantLoyaltySettings: 'Merchant Loyalty Program',
+    loyaltySubtitle: 'Configure point accruals and redemption discounts for customers',
   },
   hi: {
     // Navigation Tabs
@@ -292,5 +316,17 @@ export const translations: Record<Language, TranslationDictionary> = {
     currentDevice: 'वर्तमान डिवाइस',
     logOutAllOther: 'अन्य सभी डिवाइस से लॉग आउट करें',
     lastActive: 'अंतिम सक्रियता',
+
+    // Loyalty & Referrals
+    referralAndRewards: 'रेफर करें और रिवॉर्ड्स कमाएं',
+    referralTitle: 'ग्राहक रेफरल नेटवर्क',
+    referralSubtitle: 'मित्रों के साथ ट्रेडबुक शेयर करें और उनके पहले ऑर्डर पर ट्रेडकॉइन कमाएं',
+    copyCode: 'कोड कॉपी करें',
+    shareWhatsapp: 'व्हाट्सएप पर शेयर करें',
+    friendsReferred: 'रेफर किए गए मित्र',
+    coinsEarned: 'कुल अर्जित सिक्के',
+    claimReferral: 'क्या आपके पास रेफरल कोड है?',
+    merchantLoyaltySettings: 'व्यापारी लॉयल्टी प्रोग्राम',
+    loyaltySubtitle: 'ग्राहकों के लिए अंक अर्जन और छूट की सीमाएं सेट करें',
   },
 };
