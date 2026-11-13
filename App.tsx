@@ -20,6 +20,7 @@ import { ProfileScreen } from './src/screens/ProfileScreen';
 import { SocialScreen } from './src/screens/SocialScreen';
 import { MarketplaceScreen } from './src/screens/MarketplaceScreen';
 import { BusinessScreen } from './src/screens/BusinessScreen';
+import { HomeScreen } from './src/screens/HomeScreen';
 import { BiometricPromptModal } from './src/components/BiometricPromptModal';
 import { Palette, SoftShadow } from './src/theme/colors';
 
@@ -117,28 +118,7 @@ const MainAppContent: React.FC = () => {
       ) : activeTab === 'business' ? (
         <BusinessScreen onNavigateToChat={() => setActiveTab('social')} />
       ) : (
-        <ScrollView contentContainerStyle={styles.contentContainer}>
-          {/* Tab 1: Home Dashboard (PRD Section 6.1) */}
-          {activeTab === 'home' && (
-            <View style={styles.card}>
-              <Text style={styles.cardEmoji}>🏠</Text>
-              <Text style={styles.cardTitle}>Customer Home Dashboard</Text>
-              <Text style={styles.cardDesc}>
-                Discover nearby verified shops, browse trending categories, track active orders,
-                view your Digital Purchase Book, and check your loyalty rewards.
-              </Text>
-              <View style={styles.metaBox}>
-                <Text style={styles.metaTitle}>Customer ID: {user?.customerId}</Text>
-                <Text style={styles.metaSub}>ReliabilityScore (CRS): 750 (Strong)</Text>
-              </View>
-              <View style={styles.tagRow}>
-                <Text style={styles.tag}>PRD Section 6.1</Text>
-                <Text style={styles.tag}>Purchase Book Vault</Text>
-                <Text style={styles.tag}>Order Tracking</Text>
-              </View>
-            </View>
-          )}
-        </ScrollView>
+        <HomeScreen onNavigateTab={(tab) => setActiveTab(tab)} />
       )}
 
       {/* 5-Item Bottom Navigation Bar (PRD Section 19) */}
