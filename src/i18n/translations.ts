@@ -126,6 +126,15 @@ export interface TranslationDictionary {
   orderSample: string;
   compareSuppliers: string;
   purchaseOrderGenerated: string;
+
+  // Offline-First Sync & Conflicts (Module 12)
+  offlineSync: string;
+  syncStatus: string;
+  outboxPending: string;
+  syncedJustNow: string;
+  conflictResolved: string;
+  syncNow: string;
+  simulateOffline: string;
 }
 
 export const translations: Record<Language, TranslationDictionary> = {
@@ -255,6 +264,15 @@ export const translations: Record<Language, TranslationDictionary> = {
     orderSample: 'Order Test Sample',
     compareSuppliers: 'Compare Suppliers',
     purchaseOrderGenerated: 'Purchase Order Issued',
+
+    // Offline-First Sync & Conflicts (Module 12)
+    offlineSync: 'Offline Sync & Outbox',
+    syncStatus: 'Sync Engine Status',
+    outboxPending: 'Pending Mutations in Outbox',
+    syncedJustNow: 'Everything synchronized to cloud',
+    conflictResolved: 'Auto-Resolved Conflict',
+    syncNow: 'Sync Outbox Now',
+    simulateOffline: 'Simulate Offline Mode',
   },
   hi: {
     // Navigation Tabs
@@ -382,5 +400,14 @@ export const translations: Record<Language, TranslationDictionary> = {
     orderSample: 'सैंपल ऑर्डर करें',
     compareSuppliers: 'सप्लायर्स की तुलना करें',
     purchaseOrderGenerated: 'खरीद आदेश (PO) जारी हुआ',
+
+    // Offline-First Sync & Conflicts (Module 12)
+    offlineSync: 'ऑफ़लाइन सिंक और आउटबॉक्स',
+    syncStatus: 'सिंक इंजन स्थिति',
+    outboxPending: 'आउटबॉक्स में लंबित कार्य',
+    syncedJustNow: 'क्लाउड पर सब कुछ सिंक है',
+    conflictResolved: 'स्वतः सुलझाया गया डेटा विवाद',
+    syncNow: 'अभी सिंक करें',
+    simulateOffline: 'ऑफ़लाइन मोड का परीक्षण करें',
   },
 };
